@@ -11,7 +11,7 @@ This template has *basic* features/functionalities for a **user authentication**
 > [!WARNING]
 > Remember to enter virtualenv using **env\Scripts\activate** before installing these packages
 ```
-    pip install djangorestframework djangorestframework-simplejwt django-cors-headers djoser
+    pip install djangorestframework djangorestframework-simplejwt django-cors-headers djoser python-dotenv psycopg2
 ```
 ```
     python manage.py makemigrations
