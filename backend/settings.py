@@ -152,7 +152,7 @@ SIMPLE_JWT = {
     # Access token's lifespan
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     
-    # Refresh token lifespan (login after 10 days)
+    # Refresh token lifespan (login after 15 days)
     "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
     
     # If the user is active, they do not have to relogin to get refresh token after time span
@@ -223,10 +223,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("DATABASE_NAME"),
+        'USER': os.environ.get("DATABASE_USER"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
+        'HOST': os.environ.get("DATABASE_HOST"),
+        'PORT': os.environ.get("DATABASE_PORT")
     }
 }
+
 
 
 # Password validation
