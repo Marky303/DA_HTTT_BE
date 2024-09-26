@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from .models import Note, UserAccount
+from .models import *
 
 # Register account models
 admin.site.register(UserAccount)
