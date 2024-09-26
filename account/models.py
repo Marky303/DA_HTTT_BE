@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.validators import RegexValidator
 
 # Manager class for user account with customized create user function
 class UserAccountManager(BaseUserManager):
@@ -21,6 +22,12 @@ class UserAccountManager(BaseUserManager):
         user.save()
         return user
 
+# Regex
+phone_number_validator = RegexValidator(
+    regex=r'^[\d\+\-\(\)\s]+$',
+    message='Phone number can only contain digits, spaces, and the following symbols: + - ( )'
+)
+
 # Custom user model goes here.
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     # Important user fields
@@ -30,9 +37,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     
     # Other informative user fields
-    currentJob = models.CharField(max_length=50, default="Unemployed")
-    currentLocation = models.CharField(max_length=120, default="Nowhere")
-    shortDesc = models.CharField(max_length=100, default="Relatively hard-working and normal human being")
+    JobTitle = models.CharField(max_length=50, default='Employee')
+    PhoneNumber = models.CharField(max_length=20, validators=[phone_number_validator])
+    City = models.CharField(max_length=20, default='Nowhere')
+    AddressLine1 = models.CharField(max_length=20, default='Nowhere')
+    AddressLine2 = models.CharField(max_length=20, default='Nowhere')
+    CountryRegionName = models.CharField(max_length=20, default='Nowhere')
     
     # Choosing email as username for login/signup
     USERNAME_FIELD = 'email'
