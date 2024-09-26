@@ -38,7 +38,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     
     # Other informative user fields
     JobTitle = models.CharField(max_length=50, default='Employee')
-    PhoneNumber = models.CharField(max_length=20, validators=[phone_number_validator])
+    PhoneNumber = models.CharField(max_length=20, validators=[phone_number_validator], blank=True)
     City = models.CharField(max_length=20, default='Nowhere')
     AddressLine1 = models.CharField(max_length=20, default='Nowhere')
     AddressLine2 = models.CharField(max_length=20, default='Nowhere')
