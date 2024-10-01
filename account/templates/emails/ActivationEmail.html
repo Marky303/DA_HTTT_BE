@@ -9,7 +9,7 @@
 {% blocktrans %}Please finish your account creation process on {{ site_name }}. {% endblocktrans %}
 
 {% trans "Please go to the following page to activate your account:" %}
-{{ protocol }}://{{ domain }}/{{ url|safe }}
+{{ domain }}/{{ url|safe }}
 
 {% trans "Thanks for using our site!" %}
 
@@ -20,7 +20,7 @@
 {% block html_body%}
 <p>{% blocktrans %}Please finish your account creation process on {{ site_name }}. {% endblocktrans %}</p>
 
-<p>Please go to the <a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">following page</a> to activate your account.</p>
+<p>Please go to the <a href="{{ domain }}/{{ url|safe }}">following page</a> to activate your account.</p>
 
 <p>Thanks for using our site!</p>
 
