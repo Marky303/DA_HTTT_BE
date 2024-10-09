@@ -18,6 +18,8 @@ class Territory(models.Model):
     Group = models.CharField(max_length=50, blank=False)
     
     # Statistical info... TODO
+    SalesYTD = models.DecimalField(max_digits=20, decimal_places=4, null=False, default=0)
+    SalesLastYear = models.DecimalField(max_digits=20, decimal_places=4, null=False, default=0)
     
     # Admin page default function
     def __str__(self):
@@ -40,6 +42,12 @@ class CustomerStore(models.Model):
     SquareFeet = models.PositiveIntegerField(null=True)
     NumberOfEmployees = models.PositiveIntegerField(null=True)
     
+    # Address info
+    City = models.CharField(max_length=20, default='Nowhere')
+    AddressLine1 = models.CharField(max_length=20, default='Nowhere')
+    AddressLine2 = models.CharField(max_length=20, default='Nowhere')
+    CountryRegionName = models.CharField(max_length=20, default='Nowhere')
+    
     # Admin page default function
     def __str__(self):
         return self.Name + ": " + self.BusinessType
@@ -54,8 +62,14 @@ class CustomerIndividual(models.Model):
     LastName = models.CharField(max_length=20, blank=False)
     
     # Additional individual info
-    LastName = models.CharField(max_length=20, blank=True)
+    MiddleName = models.CharField(max_length=20, blank=True)
     Age = models.PositiveIntegerField(null=True)
+    
+    # Address info
+    City = models.CharField(max_length=20, default='Nowhere')
+    AddressLine1 = models.CharField(max_length=20, default='Nowhere')
+    AddressLine2 = models.CharField(max_length=20, default='Nowhere')
+    CountryRegionName = models.CharField(max_length=20, default='Nowhere')
     
     # Admin page default function
     def __str__(self):
@@ -63,16 +77,9 @@ class CustomerIndividual(models.Model):
     
     
 class Customer(models.Model):
-    # Basic Customer info
-    AddressLine1 = models.CharField(max_length=50, blank=False)
-    AddressLine2 = models.CharField(max_length=50, blank=True)          # AddressLine2 can be blank
-    StateProvince = models.CharField(max_length=50, blank=True)         # Detail can be blank
-    City = models.CharField(max_length=50, blank=False)
-    Country = models.CharField(max_length=50, blank=False)
-    
     # Foreign keys
     EmployeeID = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, blank=True, null=True)
-    Territory = models.ForeignKey(Territory, on_delete=models.SET_NULL, blank=True, null=True)
+    TerritoryID = models.ForeignKey(Territory, on_delete=models.SET_NULL, blank=True, null=True)
     CustomerStoreID = models.ForeignKey(CustomerStore, on_delete=models.SET_NULL, blank=True, null=True)
     CustomerIndividualID = models.ForeignKey(CustomerIndividual, on_delete=models.SET_NULL, blank=True, null=True)
     
