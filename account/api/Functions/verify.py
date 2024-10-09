@@ -29,7 +29,7 @@ def VerifyEmployeeInformation(request):
     #.1 Check if name is unique
     if not user.name == userinfo['name']:
         try:
-            check_user = UserAccount.objects.get(name=userinfo['name'])
+            check_user = Employee.objects.get(name=userinfo['name'])
             error.append("Name has been taken")
         except:
             pass

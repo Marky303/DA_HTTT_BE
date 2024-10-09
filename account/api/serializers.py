@@ -19,7 +19,7 @@ class UserCreateSerializer(UserCreateSerializer):
 # Serializer for getting employee information
 class UserinfoSerializer(ModelSerializer):    
     class Meta:
-        model = UserAccount
+        model = Employee
         fields = ('email', 'name', 'JobTitle', 'PhoneNumber', 'City', 'AddressLine1', 'AddressLine2', 'CountryRegionName', 'isManager')
                 
                 
