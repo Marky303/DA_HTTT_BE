@@ -32,10 +32,10 @@ class Employee(AbstractBaseUser, PermissionsMixin):
     # Other informative user fields
     JobTitle            = models.CharField(max_length=50, default='Employee')
     PhoneNumber         = models.CharField(max_length=20, blank=True)
-    City                = models.CharField(max_length=20, default='Nowhere')
-    AddressLine1        = models.CharField(max_length=20, default='Nowhere')
-    AddressLine2        = models.CharField(max_length=20, default='Nowhere')
-    CountryRegionName   = models.CharField(max_length=20, default='Nowhere')
+    City                = models.CharField(max_length=20, null=True, blank=True)
+    AddressLine1        = models.CharField(max_length=20, null=True, blank=True)
+    AddressLine2        = models.CharField(max_length=20, null=True, blank=True)
+    CountryRegionName   = models.CharField(max_length=20, null=True, blank=True)
     
     # If UserAccount/Employee is a manager
     isManager           = models.BooleanField(default=False)
