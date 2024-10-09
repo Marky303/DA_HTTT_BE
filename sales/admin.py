@@ -6,4 +6,4 @@ admin.site.register(Customer)
 admin.site.register(CustomerIndividual)
 admin.site.register(CustomerStore)
 admin.site.register(Territory)
-
+admin.site.register(SalesOrderHeader)

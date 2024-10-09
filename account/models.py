@@ -24,30 +24,30 @@ class UserAccountManager(BaseUserManager):
 # Custom user model goes here.
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     # Important user fields
-    email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
+    email               = models.EmailField(max_length=255, unique=True)
+    name                = models.CharField(max_length=255)
+    is_active           = models.BooleanField(default=True)
+    is_staff            = models.BooleanField(default=False)
     
     # Other informative user fields
-    JobTitle = models.CharField(max_length=50, default='Employee')
-    PhoneNumber = models.CharField(max_length=20, blank=True)
-    City = models.CharField(max_length=20, default='Nowhere')
-    AddressLine1 = models.CharField(max_length=20, default='Nowhere')
-    AddressLine2 = models.CharField(max_length=20, default='Nowhere')
-    CountryRegionName = models.CharField(max_length=20, default='Nowhere')
+    JobTitle            = models.CharField(max_length=50, default='Employee')
+    PhoneNumber         = models.CharField(max_length=20, blank=True)
+    City                = models.CharField(max_length=20, default='Nowhere')
+    AddressLine1        = models.CharField(max_length=20, default='Nowhere')
+    AddressLine2        = models.CharField(max_length=20, default='Nowhere')
+    CountryRegionName   = models.CharField(max_length=20, default='Nowhere')
     
     # If UserAccount/Employee is a manager
-    isManager = models.BooleanField(default=False)
+    isManager           = models.BooleanField(default=False)
     
     # If UserAccount is an employee
-    isEmployee = models.BooleanField(default=True)
+    isEmployee          = models.BooleanField(default=True)
     
     # Choosing email as username for login/signup
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD      = 'email'
     
     # Required fields, must not be null
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS     = ['name']
     
     objects = UserAccountManager()
     
