@@ -140,7 +140,7 @@ class Customer(models.Model):
     # CustomerID              = models.IntegerField(primary_key=True)
     
     # Foreign keys
-    EmployeeID              = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    EmployeeID              = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
     TerritoryID             = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
     CustomerStoreID         = models.ForeignKey(CustomerStore, on_delete=models.SET_NULL, null=True)
     CustomerIndividualID    = models.ForeignKey(CustomerIndividual, on_delete=models.SET_NULL, null=True)
@@ -169,7 +169,7 @@ class SalesOrderHeader(models.Model):
     TotalDue        = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    EmployeeID              = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    EmployeeID              = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
     CustomerID              = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
     TerritoryID             = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
     

@@ -49,7 +49,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     # Required fields, must not be null
     REQUIRED_FIELDS     = ['name']
     
-    objects = UserAccountManager()
+    objects             = UserAccountManager()
     
     # Functions to get user information
     def get_full_name(self):
