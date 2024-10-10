@@ -87,6 +87,6 @@ def VerifySpecialOfferProductExist(request):
     product          = Product.objects.get(id=productID)
     
     # Create new special offer product object
-    exists = SpecialOfferProduct.objects.filter(SpecialOfferID=specialOffer, ProductID=product).exists()
+    exists = SpecialOfferProduct.objects.filter(SpecialOffer=specialOffer, Product=product).exists()
     
     return exists
