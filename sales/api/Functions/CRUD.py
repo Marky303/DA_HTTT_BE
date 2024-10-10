@@ -61,4 +61,17 @@ def CreateNewSpecialOffer(request):
     
     # Save new special offer object
     specialOffer.save()
+
+def DeleteSpecialOfferWithID(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    specialOfferInfo = ast.literal_eval(dict)
     
+    # Get special offer id from dict
+    specialOfferID   = specialOfferInfo['id']
+    
+    # Get special offer object
+    specialOffer     = SpecialOffer.objects.get(id=specialOfferID)
+    
+    # Delete special offer object
+    specialOffer.delete()
