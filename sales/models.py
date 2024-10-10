@@ -102,10 +102,10 @@ class CustomerStore(models.Model):
     SquareFeet          = models.PositiveIntegerField(null=True)
     NumberOfEmployees   = models.PositiveIntegerField(null=True)
     
-    City                = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    AddressLine1        = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    AddressLine2        = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    CountryRegionName   = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
+    City                = models.CharField(max_length=shortLength, null=True, blank=True)
+    AddressLine1        = models.CharField(max_length=mediumLength, null=True, blank=True)
+    AddressLine2        = models.CharField(max_length=mediumLength, null=True, blank=True)
+    CountryRegionName   = models.CharField(max_length=shortLength, null=True, blank=True)
     
     # Admin page default function
     def __str__(self):
