@@ -12,7 +12,7 @@ def SaveNewSpecialOfferInformation(request):
     specialOfferInfo = ast.literal_eval(dict)
     
     # Get special offer info from dict
-    specialOfferID          = specialOfferInfo['id']
+    specialOfferID          = specialOfferInfo['specialOfferID']
     Description             = specialOfferInfo['Description']
     DiscountPct             = specialOfferInfo['DiscountPct']
     Type                    = specialOfferInfo['Type']
@@ -68,10 +68,48 @@ def DeleteSpecialOfferWithID(request):
     specialOfferInfo = ast.literal_eval(dict)
     
     # Get special offer id from dict
-    specialOfferID   = specialOfferInfo['id']
+    specialOfferID   = specialOfferInfo['specialOfferID']
     
     # Get special offer object
     specialOffer     = SpecialOffer.objects.get(id=specialOfferID)
     
     # Delete special offer object
     specialOffer.delete()
+    
+def CreateNewSpecialOfferProduct(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    info = ast.literal_eval(dict)
+    
+    # Get ids from dict
+    specialOfferID   = info['specialOfferID']
+    productID        = info['productID']
+    
+    # Get special offer and product objects
+    specialOffer     = SpecialOffer.objects.get(id=specialOfferID)
+    product          = Product.objects.get(id=productID)
+    
+    # Create new special offer product object
+    newObject = SpecialOfferProduct(SpecialOfferID=specialOffer, ProductID=product)
+    
+    # Save new object
+    newObject.save()
+    
+def DeleteSpecialOfferProductWithID(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    info = ast.literal_eval(dict)
+    
+    # Get ids from dict
+    specialOfferID   = info['specialOfferID']
+    productID        = info['productID']
+    
+    # Get special offer and product objects
+    specialOffer     = SpecialOffer.objects.get(id=specialOfferID)
+    product          = Product.objects.get(id=productID)
+    
+    # Create new special offer product object
+    deleteObject = SpecialOfferProduct.objects.get(SpecialOfferID=specialOffer, ProductID=product)
+    
+    # Save new object
+    deleteObject.delete()

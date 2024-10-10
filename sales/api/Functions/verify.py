@@ -14,13 +14,14 @@ def VerifySpecialOfferExist(request, error):
     specialOfferInfo = ast.literal_eval(dict)
     
     # Get special offer id
-    specialOfferID = specialOfferInfo['id']
+    specialOfferID = specialOfferInfo['specialOfferID']
     
     # Check if id exist
     exists = SpecialOffer.objects.filter(id=specialOfferID).exists()
 
     if not exists:
         error.append('Special offer does not exist!')
+
 
 
 def VerifySpecialOfferInformation(request, error):
@@ -53,4 +54,39 @@ def VerifySpecialOfferInformation(request, error):
         error.append("DiscountPct must be between 0 and 1")    
         
     #.6 Check if overlapp other special offers
+   
+   
+   
+def VerifyProductExist(request, error):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    productInfo = ast.literal_eval(dict)
     
+    # Get special offer id
+    productID = productInfo['productID']
+    
+    # Check if id exist
+    exists = Product.objects.filter(id=productID).exists()
+
+    if not exists:
+        error.append('Product does not exist!')
+        
+
+
+def VerifySpecialOfferProductExist(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    info = ast.literal_eval(dict)
+    
+    # Get ids from dict
+    specialOfferID   = info['specialOfferID']
+    productID        = info['productID']
+    
+    # Get special offer and product objects
+    specialOffer     = SpecialOffer.objects.get(id=specialOfferID)
+    product          = Product.objects.get(id=productID)
+    
+    # Create new special offer product object
+    exists = SpecialOfferProduct.objects.filter(SpecialOfferID=specialOffer, ProductID=product).exists()
+    
+    return exists

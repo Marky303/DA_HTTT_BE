@@ -111,7 +111,7 @@ def CreateSpecialOffer(request):
     
     
     
-# Create new Special Offer
+# Delete Special Offer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def DeleteSpecialOffer(request):
@@ -134,6 +134,78 @@ def DeleteSpecialOffer(request):
         
         # Response
         return ResponseSuccessful("Deleted special offer")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
+    
+    
+    
+# Create new special offer product
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def CreateSpecialOfferProduct(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if special offer product already existed for adding
+        if VerifySpecialOfferProductExist(request):
+            raise Exception("SepcialOffer - Product already existed!")
+        
+        # Check if special offer exists
+        VerifySpecialOfferExist(request, error)
+        
+        # Check if product exists
+        VerifyProductExist(request, error)
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Create new special offer - product
+        CreateNewSpecialOfferProduct(request)        
+        
+        # Response
+        return ResponseSuccessful("Created new special offer - product")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
+    
+    
+    
+# Create new special offer product
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def DeleteSpecialOfferProduct(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if special offer product doesnt exist for deleting
+        if not VerifySpecialOfferProductExist(request):
+            raise Exception("SepcialOffer - Product does not exist!")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Edit special offer
+        DeleteSpecialOfferProductWithID(request)        
+        
+        # Response
+        return ResponseSuccessful("Deleted special offer - product")
           
     except Exception as e:
         # Response a error code and error content
