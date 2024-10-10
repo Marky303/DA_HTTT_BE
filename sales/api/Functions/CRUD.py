@@ -90,7 +90,7 @@ def CreateNewSpecialOfferProduct(request):
     product          = Product.objects.get(id=productID)
     
     # Create new special offer product object
-    newObject = SpecialOfferProduct(SpecialOfferID=specialOffer, ProductID=product)
+    newObject = SpecialOfferProduct(SpecialOffer=specialOffer, Product=product)
     
     # Save new object
     newObject.save()
@@ -109,7 +109,7 @@ def DeleteSpecialOfferProductWithID(request):
     product          = Product.objects.get(id=productID)
     
     # Create new special offer product object
-    deleteObject = SpecialOfferProduct.objects.get(SpecialOfferID=specialOffer, ProductID=product)
+    deleteObject = SpecialOfferProduct.objects.get(SpecialOffer=specialOffer, Product=product)
     
     # Save new object
     deleteObject.delete()
