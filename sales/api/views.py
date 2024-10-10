@@ -55,8 +55,11 @@ def EditSpecialOffer(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
+        # Check if special offer exists
+        VerifySpecialOfferExist(request, error)
+        
         # Check if special offer info is valid
-        error = VerifySpecialOfferInformation(request)
+        VerifySpecialOfferInformation(request, error)
         
         # Check if there is an error
         if error:
@@ -88,7 +91,7 @@ def CreateSpecialOffer(request):
             raise Exception("You are not an employee")
         
         # Check if special offer info is valid
-        error = VerifySpecialOfferInformation(request)
+        VerifySpecialOfferInformation(request, error)
         
         # Check if there is an error
         if error:
@@ -99,6 +102,38 @@ def CreateSpecialOffer(request):
         
         # Response
         return ResponseSuccessful("Created new special offer")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
+    
+    
+    
+# Create new Special Offer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def DeleteSpecialOffer(request):
+    try:     
+        error = []
+        
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if special offer exists
+        VerifySpecialOfferExist(request, error)
+
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Delete special offer
+        DeleteSpecialOfferWithID(request)
+        
+        # Response
+        return ResponseSuccessful("Deleted special offer")
           
     except Exception as e:
         # Response a error code and error content
