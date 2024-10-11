@@ -8,3 +8,15 @@ class SpecialOfferSerializer(ModelSerializer):
     class Meta:
         model = SpecialOffer
         fields = '__all__'
+        
+# Special offer - product serializer
+class SpecialOfferProductSerializer(ModelSerializer):
+    class Meta:
+        model = SpecialOfferProduct
+        fields = '__all__'
+        
+# Territory serializer
+class TerritorySerializer(ModelSerializer):
+    class Meta:
+        model = Territory
+        fields = '__all__'

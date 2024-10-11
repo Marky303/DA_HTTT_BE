@@ -8,7 +8,7 @@ from sales.models import *
 
 dateTimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
-def VerifySpecialOfferExist(request, error):
+def VerifySpecialOfferExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     specialOfferInfo = ast.literal_eval(dict)
@@ -19,8 +19,7 @@ def VerifySpecialOfferExist(request, error):
     # Check if id exist
     exists = SpecialOffer.objects.filter(id=specialOfferID).exists()
 
-    if not exists:
-        error.append('Special offer does not exist!')
+    return exists
 
 
 
@@ -57,7 +56,7 @@ def VerifySpecialOfferInformation(request, error):
    
    
    
-def VerifyProductExist(request, error):
+def VerifyProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
@@ -68,8 +67,7 @@ def VerifyProductExist(request, error):
     # Check if id exist
     exists = Product.objects.filter(id=productID).exists()
 
-    if not exists:
-        error.append('Product does not exist!')
+    return exists
         
 
 

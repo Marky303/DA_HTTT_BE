@@ -6,7 +6,7 @@ from . import views
 # Setting up urls patterns
 urlpatterns = [
     # Special offer related
-    path('getallspecialoffers/'         , views.GetSpecialOffer),            
+    path('getallspecialoffer/'         , views.GetSpecialOffer),            
     path('editspecialoffer/'            , views.EditSpecialOffer),
     path('createspecialoffer/'          , views.CreateSpecialOffer),
     path('deletespecialoffer/'          , views.DeleteSpecialOffer),
@@ -14,5 +14,9 @@ urlpatterns = [
     # Special offer product related
     path('createspecialofferproduct/'   , views.CreateSpecialOfferProduct),
     path('deletespecialofferproduct/'   , views.DeleteSpecialOfferProduct),
+    path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
+    
+    # Territory related
+    path('getallterritory/'             , views.GetTerritory),
     
 ]
