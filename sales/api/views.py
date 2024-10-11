@@ -19,7 +19,7 @@ def GetSpecialOffer(request):
     try:
         error = []
     
-        # Verify is user is an employee
+        # Verify if user is an employee
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
@@ -51,12 +51,13 @@ def EditSpecialOffer(request):
     try:
         error = []
     
-        # Verify is user is an employee
+        # Verify if user is an employee
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
         # Check if special offer exists
-        VerifySpecialOfferExist(request, error)
+        if not VerifySpecialOfferExist(request):
+            raise Exception("Special offer does not exist")
         
         # Check if special offer info is valid
         VerifySpecialOfferInformation(request, error)
@@ -86,7 +87,7 @@ def CreateSpecialOffer(request):
     try:
         error = []
     
-        # Verify is user is an employee
+        # Verify if user is an employee
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
@@ -123,7 +124,8 @@ def DeleteSpecialOffer(request):
             raise Exception("You are not an employee")
         
         # Check if special offer exists
-        VerifySpecialOfferExist(request, error)
+        if not VerifySpecialOfferExist(request):
+            raise Exception("Special offer does not exist")
 
         # Check if there is an error
         if error:
@@ -154,15 +156,17 @@ def CreateSpecialOfferProduct(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
+        # Check if special offer exists
+        if not VerifySpecialOfferExist(request):
+            raise Exception("Special offer does not exist")
+        
+        # Check if product exists
+        if not VerifyProductExist(request):
+            raise Exception("Product does not exist")
+        
         # Check if special offer product already existed for adding
         if VerifySpecialOfferProductExist(request):
             raise Exception("SepcialOffer - Product already existed!")
-        
-        # Check if special offer exists
-        VerifySpecialOfferExist(request, error)
-        
-        # Check if product exists
-        VerifyProductExist(request, error)
         
         # Check if there is an error
         if error:
@@ -182,7 +186,35 @@ def CreateSpecialOfferProduct(request):
     
     
     
-# Create new special offer product
+# Get all special offer product
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetSpecialOfferProduct(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Get special offer list
+        specialOfferProductList = GetAllSpecialOfferProduct()
+        
+        # Create serializer
+        serializer = SpecialOfferProductSerializer(specialOfferProductList, many=True)  
+        
+        # Response
+        return Response(serializer.data)
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)    
+    
+    
+    
+# Delete special offer product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def DeleteSpecialOfferProduct(request):

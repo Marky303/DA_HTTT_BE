@@ -113,3 +113,6 @@ def DeleteSpecialOfferProductWithID(request):
     
     # Save new object
     deleteObject.delete()
+    
+def GetAllSpecialOfferProduct():
+    return SpecialOfferProduct.objects.all()
