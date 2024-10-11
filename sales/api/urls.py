@@ -16,4 +16,7 @@ urlpatterns = [
     path('deletespecialofferproduct/'   , views.DeleteSpecialOfferProduct),
     path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
     
+    # Territory related
+    path('getallterritory/'             , views.GetTerritory),
+    
 ]

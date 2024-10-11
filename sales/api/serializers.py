@@ -14,3 +14,9 @@ class SpecialOfferProductSerializer(ModelSerializer):
     class Meta:
         model = SpecialOfferProduct
         fields = '__all__'
+        
+# Territory serializer
+class TerritorySerializer(ModelSerializer):
+    class Meta:
+        model = Territory
+        fields = '__all__'

@@ -23,10 +23,6 @@ def GetSpecialOffer(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
         # Get special offer list
         specialOfferList = GetAllSpecialOffer()
         
@@ -126,10 +122,6 @@ def DeleteSpecialOffer(request):
         # Check if special offer exists
         if not VerifySpecialOfferExist(request):
             raise Exception("Special offer does not exist")
-
-        # Check if there is an error
-        if error:
-            raise Exception()
         
         # Delete special offer
         DeleteSpecialOfferWithID(request)
@@ -167,10 +159,6 @@ def CreateSpecialOfferProduct(request):
         # Check if special offer product already existed for adding
         if VerifySpecialOfferProductExist(request):
             raise Exception("SepcialOffer - Product already existed!")
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
         
         # Create new special offer - product
         CreateNewSpecialOfferProduct(request)        
@@ -244,3 +232,29 @@ def DeleteSpecialOfferProduct(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error) 
+    
+# Get all territory view
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetTerritory(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Get special offer list
+        territoryList = GetAllTerritory()
+        
+        # Create serializer
+        serializer = TerritorySerializer(territoryList, many=True)  
+        
+        # Response
+        return Response(serializer.data)
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)  

@@ -116,3 +116,6 @@ def DeleteSpecialOfferProductWithID(request):
     
 def GetAllSpecialOfferProduct():
     return SpecialOfferProduct.objects.all()
+
+def GetAllTerritory():
+    return Territory.objects.all()
