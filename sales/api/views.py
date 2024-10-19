@@ -328,18 +328,18 @@ def DeleteCustomerIndividual(request):
 
 
 
-# EXAMPLE FOR TESTING
-from sales.models import *
-from .serializers import NoteSerializer
+# # EXAMPLE FOR TESTING
+# from sales.models import *
+# from .serializers import NoteSerializer
 
-# Example: get all notes of a certain user
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getNotes(request):
-    user = request.user
-    notes = user.note_set.all()
-    serializer = NoteSerializer(notes, many=True)
-    return Response(serializer.data)
+# # Example: get all notes of a certain user
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def getNotes(request):
+#     user = request.user
+#     notes = user.note_set.all()
+#     serializer = NoteSerializer(notes, many=True)
+#     return Response(serializer.data)
 
 
 

@@ -24,11 +24,11 @@ class CustomerIndividualInfoSerializer(ModelSerializer):
         
 # EXAMPLE SERIALIZER FOR TESTING
 # Note model for testing
-from sales.models import Note
-from rest_framework.serializers import ModelSerializer        
+# from sales.models import Note
+# from rest_framework.serializers import ModelSerializer        
 
-# Note serializer
-class NoteSerializer(ModelSerializer):
-    class Meta:
-        model = Note
-        fields = '__all__'
+# # Note serializer
+# class NoteSerializer(ModelSerializer):
+#     class Meta:
+#         model = Note
+#         fields = '__all__'

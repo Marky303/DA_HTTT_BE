@@ -6,18 +6,18 @@ from . import views
 # Setting up urls patterns
 urlpatterns = [
     # Special offer related
-    path('getallspecialoffer/'         , views.GetSpecialOffer),            
-    path('editspecialoffer/'            , views.EditSpecialOffer),
-    path('createspecialoffer/'          , views.CreateSpecialOffer),
-    path('deletespecialoffer/'          , views.DeleteSpecialOffer),
+    # path('getallspecialoffer/'         , views.GetSpecialOffer),            
+    # path('editspecialoffer/'            , views.EditSpecialOffer),
+    # path('createspecialoffer/'          , views.CreateSpecialOffer),
+    # path('deletespecialoffer/'          , views.DeleteSpecialOffer),
 
-    # Special offer product related
-    path('createspecialofferproduct/'   , views.CreateSpecialOfferProduct),
-    path('deletespecialofferproduct/'   , views.DeleteSpecialOfferProduct),
-    path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
+    # # Special offer product related
+    # path('createspecialofferproduct/'   , views.CreateSpecialOfferProduct),
+    # path('deletespecialofferproduct/'   , views.DeleteSpecialOfferProduct),
+    # path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
     
-    # Territory related
-    path('getallterritory/'             , views.GetTerritory),
+    # # Territory related
+    # path('getallterritory/'             , views.GetTerritory),
     
     # Product related
     path('getproductinformation/'       , views.GetProductInformation),
