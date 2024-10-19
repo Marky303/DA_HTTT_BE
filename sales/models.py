@@ -122,7 +122,7 @@ class CustomerIndividual(models.Model):
     MiddleName          = models.CharField(max_length=decimalMaxDigit, blank=False, null=True)
     
     Title               = models.CharField(max_length=shortLength, blank=False)         
-    EmailAdress         = models.CharField(max_length=mediumLength, blank=False)  
+    EmailAddress         = models.CharField(max_length=mediumLength, blank=False)  
     PhoneNumber         = models.CharField(max_length=decimalMaxDigit, validators=[phone_number_validator], blank=False)
     
     City                = models.CharField(max_length=shortLength, null=True, blank=True)
