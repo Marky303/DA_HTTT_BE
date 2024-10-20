@@ -59,7 +59,7 @@ def VerifyCustomerStoreExist(request):
     customerStore = ast.literal_eval(dict)
     
     # Get special offer id
-    StoreID = customerStore['ProductID']
+    StoreID = customerStore['StoreID']
     
     # Check if id exist
     exists = CustomerStore.objects.filter(id=StoreID).exists()

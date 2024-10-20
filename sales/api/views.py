@@ -17,8 +17,8 @@ from sales.api.serializers import *
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
-    product = request.product
-    serializer = ProductInfoSerializer(product)
+    product = Product.objects.all()
+    serializer = ProductInfoSerializer(product, many=True)
     return Response(serializer.data)
 
 
@@ -34,7 +34,7 @@ def EditProductInformation(request):
             raise Exception("Don't have a product")
                 
         # Verify if employee information is valid
-        error = VerifyProductInformation(request)
+        # error = VerifyProductInformation(request)
         
         # Check if there is an error
         if error:
@@ -64,7 +64,7 @@ def CreateProduct(request):
             raise Exception("You are not an employee")
         
         # Check if special offer info is valid
-        VerifyProductInformation(request, error)
+        # VerifyProductInformation(request, error)
         
         # Check if there is an error
         if error:
@@ -120,8 +120,8 @@ def DeleteProduct(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def GetCustomerStoreInformation(request):
-    store = request.store
-    serializer = CustomerStoreInfoSerializer(store)
+    store = CustomerStore.objects.all()
+    serializer = CustomerStoreInfoSerializer(store, many=True)
     return Response(serializer.data)
 
 
@@ -133,11 +133,11 @@ def EditCustomerStoreInformation(request):
         error = []
         
         # Verify is user is an employee
-        if not VerifyProductExist(request):
+        if not VerifyCustomerStoreExist(request):
             raise Exception("Don't have a customer store")
                 
         # Verify if employee information is valid
-        error = VerifyCustomerStoreInformation(request)
+        # error = VerifyCustomerStoreInformation(request)
         
         # Check if there is an error
         if error:
@@ -167,7 +167,7 @@ def CreateCustomerStore(request):
             raise Exception("You are not an employee")
         
         # Check if special offer info is valid
-        VerifyCustomerStoreInformation(request, error)
+        # VerifyCustomerStoreInformation(request, error)
         
         # Check if there is an error
         if error:
@@ -177,7 +177,7 @@ def CreateCustomerStore(request):
         CreateNewCustomerStore(request)        
         
         # Response
-        return ResponseSuccessful("Created new product successfully")
+        return ResponseSuccessful("Created new customer store successfully")
           
     except Exception as e:
         # Response a error code and error content
@@ -196,15 +196,15 @@ def DeleteCustomerStore(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
-        # Check if special offer exists
+        # Check if customer store exists
         if not VerifyCustomerStoreExist(request):
-            raise Exception("Product does not exist")
+            raise Exception("Customer store does not exist")
         
         # Delete special offer
         DeleteCustomerStoreWithID(request)
         
         # Response
-        return ResponseSuccessful("Deleted product successfully")
+        return ResponseSuccessful("Deleted customer store successfully")
           
     except Exception as e:
         # Response a error code and error content
@@ -221,8 +221,8 @@ def DeleteCustomerStore(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def GetCustomerIndividualInformation(request):
-    individual = request.individual
-    serializer = CustomerIndividualInfoSerializer(individual)
+    individual = CustomerIndividual.objects.all()
+    serializer = CustomerIndividualInfoSerializer(individual, many=True)
     return Response(serializer.data)
 
 
@@ -234,11 +234,11 @@ def EditCustomerIndividualInformation(request):
         error = []
         
         # Verify is user is an employee
-        if not VerifyProductExist(request):
+        if not VerifyCustomerIndividualExist(request):
             raise Exception("Don't have a customer individual")
                 
         # Verify if employee information is valid
-        error = VerifyCustomerIndividualInformation(request)
+        # error = VerifyCustomerIndividualInformation(request)
         
         # Check if there is an error
         if error:
@@ -268,7 +268,7 @@ def CreateCustomerIndividual(request):
             raise Exception("You are not an employee")
         
         # Check if special offer info is valid
-        VerifyCustomerIndividualInformation(request, error)
+        # VerifyCustomerIndividualInformation(request, error)
         
         # Check if there is an error
         if error:
