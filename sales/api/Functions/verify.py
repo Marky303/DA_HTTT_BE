@@ -49,7 +49,6 @@ def VerifySpecialOfferInformation(request, error):
 
 
 
-
 # Product related______________________________________________________________________
 # Check if product exists
 def VerifyProductExist(request):
