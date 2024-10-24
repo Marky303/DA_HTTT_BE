@@ -151,7 +151,9 @@ def CreateSpecialOffer(request):
             error.append(str(e))
         return ResponseError(error)
     
-    
+# Create new Special Offer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def CreateProduct(request):
     try:
         error = []
@@ -205,7 +207,9 @@ def DeleteSpecialOffer(request):
             error.append(str(e))
         return ResponseError(error) 
     
-    
+# Delete Special Offer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def DeleteProduct(request):
     try:     
         error = []
@@ -229,7 +233,6 @@ def DeleteProduct(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error) 
-    
     
     
 # Create new special offer product

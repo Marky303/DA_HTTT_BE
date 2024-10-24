@@ -36,6 +36,8 @@ def SaveNewSpecialOfferInformation(request):
     # Save info
     specialOffer.save()
     
+    
+    
 def CreateNewSpecialOffer(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -62,6 +64,8 @@ def CreateNewSpecialOffer(request):
     # Save new special offer object
     specialOffer.save()
 
+
+
 def DeleteSpecialOfferWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -75,6 +79,8 @@ def DeleteSpecialOfferWithID(request):
     
     # Delete special offer object
     specialOffer.delete()
+    
+
     
 def CreateNewSpecialOfferProduct(request):
     # Converting request.body to dictionary type
@@ -95,6 +101,8 @@ def CreateNewSpecialOfferProduct(request):
     # Save new object
     newObject.save()
     
+    
+    
 def DeleteSpecialOfferProductWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -114,11 +122,14 @@ def DeleteSpecialOfferProductWithID(request):
     # Save new object
     deleteObject.delete()
     
+    
 def GetAllSpecialOfferProduct():
     return SpecialOfferProduct.objects.all()
 
+
 def GetAllTerritory():
     return Territory.objects.all()
+
 
 def GetAllProduct():
     return Product.objects.all()
@@ -129,7 +140,7 @@ def SaveNewProduct(request):
     productInfo = ast.literal_eval(dict)
     
     # Extract new information from request
-    ProductID           = productInfo['ProductID']
+    productID           = productInfo['productID']
     Name                = productInfo['Name']
     Manufacturer        = productInfo['Manufacturer']
     Summary             = productInfo['Summary']
@@ -142,7 +153,7 @@ def SaveNewProduct(request):
     Style               = productInfo['Style']
     
     #Get product
-    product = Product.objects.get(id=ProductID)
+    product = Product.objects.get(id=productID)
     
     
     # Change new employee infomation
@@ -189,7 +200,7 @@ def DeleteProductWithID(request):
     productInfo = ast.literal_eval(dict)
     
     # Get special offer id from dict
-    ProductID   = productInfo['ProductID']
+    ProductID   = productInfo['productID']
     
     # Get special offer object
     product     = Product.objects.get(id=ProductID)
