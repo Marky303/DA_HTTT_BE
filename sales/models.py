@@ -122,7 +122,7 @@ class CustomerIndividual(models.Model):
     MiddleName          = models.CharField(max_length=decimalMaxDigit, blank=False, null=True)
     
     Title               = models.CharField(max_length=shortLength, blank=False)         
-    EmailAdress         = models.CharField(max_length=mediumLength, blank=False)  
+    EmailAddress        = models.CharField(max_length=mediumLength, blank=False)  
     PhoneNumber         = models.CharField(max_length=decimalMaxDigit, validators=[phone_number_validator], blank=False)
     
     City                = models.CharField(max_length=shortLength, null=True, blank=True)
@@ -192,7 +192,7 @@ class SalesOrderDetail(models.Model):
     LineTotal               = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    SalesOrder              = models.ForeignKey(SalesOrderHeader, on_delete=models.CASCADE, null=False)
+    SalesOrder              = models.ForeignKey(SalesOrderHeader, on_delete=models.CASCADE, null=True)
     Product                 = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     SpecialOffer            = models.ForeignKey(SpecialOffer, on_delete=models.SET_NULL, null=True)
     
