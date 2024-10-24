@@ -3,4 +3,3 @@ from .models import *
 
 # Register account models
 admin.site.register(Employee)
-admin.site.register(Note)
