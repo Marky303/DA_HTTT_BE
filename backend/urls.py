@@ -14,6 +14,6 @@ urlpatterns = [
     # Sales related endpoints
     path('sales/', include('sales.api.urls')),
     
-    # Note model for testing
-    path('notes/', include('account.api.urls'))
+    # # Note model for testing
+    # path('notes/', include('account.api.urls'))
 ]

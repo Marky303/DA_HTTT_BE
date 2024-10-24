@@ -19,4 +19,21 @@ urlpatterns = [
     # Territory related
     path('getallterritory/'             , views.GetTerritory),
     
+    # Product related
+    path('getproductinformation/'       , views.GetProductInformation),
+    path('createnewproduct/'            , views.CreateProduct),
+    path('editproductinformation/'      , views.EditProductInformation),
+    path('deleteproduct/'               , views.DeleteProduct),
+    
+    # Customer store related
+    path('getcustomerstoreinformation/'  , views.GetCustomerStoreInformation),
+    path('createcustomerstore/'          , views.CreateCustomerStore),
+    path('editcustomerstoreinformation/' , views.EditCustomerStoreInformation),
+    path('deletecustomerstore/'          , views.DeleteCustomerStore),
+    
+    # Customer individual related
+    path('getcustomerindividualinformation/'  , views.GetCustomerIndividualInformation),
+    path('createcustomerindividual/'          , views.CreateCustomerIndividual),
+    path('editcustomerindividualinformation/' , views.EditCustomerIndividualInformation),
+    path('deletecustomerindividual/'          , views.DeleteCustomerIndividual),
 ]

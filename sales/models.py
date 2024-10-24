@@ -132,7 +132,7 @@ class CustomerIndividual(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return self.FirstName + " " + self.LastName + " / " + self.EmailAdress
+        return self.FirstName + " " + self.LastName + " / " + self.EmailAddress
     
     
 class Customer(models.Model):
