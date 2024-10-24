@@ -355,6 +355,18 @@ def DeleteSpecialOfferProduct(request):
 
 
 
+# Territory related______________________________________________________________
+# Get all territories view
+# Get all territory view
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetTerritory(request):
+    territoryList = GetAllTerritory()
+    serializer = TerritorySerializer(territoryList, many=True)  
+    return Response(serializer.data)
+
+
+
 # Customer related_______________________________________________________________
 # Get customer store information view
 @api_view(['GET'])
@@ -425,16 +437,6 @@ def CreateCustomerStore(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error) 
-    
-    
-    
-# Get all territory view
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def GetTerritory(request):
-    territoryList = GetAllTerritory()
-    serializer = TerritorySerializer(territoryList, many=True)  
-    return Response(serializer.data)
     
     
     
