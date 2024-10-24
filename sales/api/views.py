@@ -18,6 +18,7 @@ from sales.api.Functions.CRUD import *
 from sales.api.Functions.response import *
 from sales.api.serializers import *
 
+# Special offer related__________________________________________________________
 # Get Special Offer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -32,7 +33,7 @@ def GetSpecialOffer(request):
         # Get special offer list
         specialOfferList = GetAllSpecialOffer()
         
-        # Create serializer
+        # Create serializer for special offer
         serializer = SpecialOfferSerializer(specialOfferList, many=True)  
         
         # Response
@@ -44,6 +45,38 @@ def GetSpecialOffer(request):
             error.append(str(e))
         return ResponseError(error) 
 
+
+
+# Create new Special Offer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def CreateSpecialOffer(request):
+    try:
+        error = []
+    
+        # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if special offer info is valid
+        VerifySpecialOfferInformation(request, error)
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Edit special offer
+        CreateNewSpecialOffer(request)
+        
+        # Response
+        return ResponseSuccessful("Created new special offer")
+        
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+    
 
 
 # Edit Special Offer
@@ -64,7 +97,7 @@ def EditSpecialOffer(request):
         # Check if special offer info is valid
         VerifySpecialOfferInformation(request, error)
         
-        # Edit special offer
+        # Edit special offer in database
         SaveNewSpecialOfferInformation(request)        
         
         # Response
@@ -78,7 +111,36 @@ def EditSpecialOffer(request):
 
 
 
-# Get employee information view
+# Delete Special Offer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def DeleteSpecialOffer(request):
+    try:     
+        error = []
+        
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if special offer exists
+        if not VerifySpecialOfferExist(request):
+            raise Exception("Special offer does not exist")
+        
+        # Delete special offer
+        DeleteSpecialOfferWithID(request)
+        
+        # Response
+        return ResponseSuccessful("Deleted special offer")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
+
+
+
+# Product related________________________________________________________________
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
@@ -88,25 +150,25 @@ def GetProductInformation(request):
 
 
 
-# Edit employee information view
+# Edit product information
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def EditProductInformation(request):
     try:
         error = []
         
-        # Verify is user is an employee
+        # Verify if user is an employee
         if not VerifyProductExist(request):
             raise Exception("Don't have a product")
                 
-        # Verify if employee information is valid
+        # Verify if product information is valid
         # error = VerifyProductInformation(request)
         
         # Check if there is an error
         if error:
             raise Exception()
         
-        # If employee information is valid, save new employee information
+        # If product information is valid, save new product information
         SaveNewProduct(request)
         
         # Response successful code
@@ -118,40 +180,10 @@ def EditProductInformation(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error) 
-
-
-
-# Create new Special Offer
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def CreateSpecialOffer(request):
-    try:
-        error = []
     
-        # Check if special offer info is valid
-        VerifySpecialOfferInformation(request, error)
     
-        # Verify if user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        # Edit special offer
-        CreateNewSpecialOffer(request)
-        
-        # Response
-        return ResponseSuccessful("Created new special offer")
-        
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)
     
-# Create new Special Offer
+# Create new product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def CreateProduct(request):
@@ -179,35 +211,9 @@ def CreateProduct(request):
             error.append(str(e))
         return ResponseError(error) 
     
+
     
-# Delete Special Offer
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def DeleteSpecialOffer(request):
-    try:     
-        error = []
-        
-        # Verify is user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if special offer exists
-        if not VerifySpecialOfferExist(request):
-            raise Exception("Special offer does not exist")
-        
-        # Delete special offer
-        DeleteSpecialOfferWithID(request)
-        
-        # Response
-        return ResponseSuccessful("Deleted special offer")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error) 
-    
-# Delete Special Offer
+# Delete product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def DeleteProduct(request):
@@ -222,7 +228,7 @@ def DeleteProduct(request):
         if not VerifyProductExist(request):
             raise Exception("Product does not exist")
         
-        # Delete special offer
+        # Delete product from database
         DeleteProductWithID(request)
         
         # Response
@@ -234,7 +240,9 @@ def DeleteProduct(request):
             error.append(str(e))
         return ResponseError(error) 
     
-    
+
+
+# Special offer - product related__________________________________________________
 # Create new special offer product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -299,6 +307,7 @@ def GetSpecialOfferProduct(request):
 
 
 
+# Customer related_______________________________________________________________
 # Get customer store information view
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

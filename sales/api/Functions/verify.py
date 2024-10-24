@@ -8,6 +8,8 @@ from sales.models import *
 
 dateTimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
+# Special offer related________________________________________________________________
+# Check if special offer exists
 def VerifySpecialOfferExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -23,6 +25,7 @@ def VerifySpecialOfferExist(request):
 
 
 
+# Check if special offer info is valid
 def VerifySpecialOfferInformation(request, error):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -45,31 +48,10 @@ def VerifySpecialOfferInformation(request, error):
     #.6 Check if overlapp other special offers
 
 
-def VerifyProductExist(request):    
-    # Converting request.body to dictionary type
-    dict = request.body.decode("UTF-8")
-    productInfo = ast.literal_eval(dict)
-    
-    # Get special offer id
-    ProductID = productInfo['ProductID']
-    
-    # Check if id exist
-    exists = Product.objects.filter(id=ProductID).exists()
-
-    return exists
 
 
-def VerifyProductInformation(request, error):
-    load_dotenv()
-    
-    # Converting request.body to dictionary type
-    dict = request.body.decode("UTF-8")
-    productInfo = ast.literal_eval(dict)
-    
-    # Verify steps...
-    
-   
-   
+# Product related______________________________________________________________________
+# Check if product exists
 def VerifyProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -82,8 +64,23 @@ def VerifyProductExist(request):
     exists = Product.objects.filter(id=productID).exists()
 
     return exists
+
+
+
+# Check if product info is valid
+def VerifyProductInformation(request, error):
+    load_dotenv()
+    
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    productInfo = ast.literal_eval(dict)
+    
+    # Verify steps...
+    
         
 
+# Special offer - product related______________________________________________________
+# Check if special offer product exists
 def VerifySpecialOfferProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -101,22 +98,10 @@ def VerifySpecialOfferProductExist(request):
     exists = SpecialOfferProduct.objects.filter(SpecialOffer=specialOffer, Product=product).exists()
     
     return exists
-    # if not int(ProductInfo['MinQty']) < int(ProductInfo['MaxQty']):
-    #     error.append("MinQty must be less than MaxQty")
-    
-    #.4 Check StartDate and EndDate
-    # startDate = datetime.strptime(ProductInfo['StartDate'], dateTimeFormat)
-    # endDate = datetime.strptime(ProductInfo['EndDate'], dateTimeFormat)
-    # if startDate >= endDate:
-    #     error.append("Start date must be before end date")
-    
-    #.5 Check DiscountPct
-    # if not 0 <= float(ProductInfo['DiscountPct']) <= 1:
-    #     error.append("DiscountPct must be between 0 and 1")    
-        
-    #.6 Check if overlapp other special offers
     
     
+
+# Customer related_____________________________________________________________________
 def VerifyCustomerStoreExist(request):    
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")

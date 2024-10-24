@@ -3,9 +3,15 @@ import ast
 # Import models
 from sales.models import *
 
+
+# Special offer related_______________________________________________________________
+# Get special offer list
 def GetAllSpecialOffer():
     return SpecialOffer.objects.all()
 
+
+
+# Save edited special offer info
 def SaveNewSpecialOfferInformation(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -38,6 +44,7 @@ def SaveNewSpecialOfferInformation(request):
     
     
     
+# Create new special offer
 def CreateNewSpecialOffer(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -66,6 +73,7 @@ def CreateNewSpecialOffer(request):
 
 
 
+# Delete special offer with ID from request
 def DeleteSpecialOfferWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -80,8 +88,10 @@ def DeleteSpecialOfferWithID(request):
     # Delete special offer object
     specialOffer.delete()
     
-
     
+    
+# Special offer - product related_____________________________________________________
+# Create new special offer - product relation
 def CreateNewSpecialOfferProduct(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -103,6 +113,7 @@ def CreateNewSpecialOfferProduct(request):
     
     
     
+# Delete special offer product relation
 def DeleteSpecialOfferProductWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -123,17 +134,28 @@ def DeleteSpecialOfferProductWithID(request):
     deleteObject.delete()
     
     
+
+# Get special offer - product relation list
 def GetAllSpecialOfferProduct():
     return SpecialOfferProduct.objects.all()
 
 
+
+# Territory related___________________________________________________________________
+# Get territory list
 def GetAllTerritory():
     return Territory.objects.all()
 
 
+
+# Product related_____________________________________________________________________
+# Get product list
 def GetAllProduct():
     return Product.objects.all()
 
+
+
+# Save edited product info
 def SaveNewProduct(request):
     # Converting request.body to dictionary type
     dict        = request.body.decode("UTF-8")
@@ -171,6 +193,9 @@ def SaveNewProduct(request):
     # Save employee information
     product.save()
     
+    
+    
+# Create new product
 def CreateNewProduct(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -194,6 +219,9 @@ def CreateNewProduct(request):
     # Save new special offer object
     product.save()
 
+
+
+# Delete product with ID from database
 def DeleteProductWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
@@ -207,12 +235,10 @@ def DeleteProductWithID(request):
     
     # Delete special offer object
     product.delete()
-#
-#
-#
-#
-#
-#    
+
+
+
+# Customer related____________________________________________________________________
 def GetAllCustomerStore():
     return CustomerStore.objects.all()
 
