@@ -131,6 +131,7 @@ def VerifyCustomerStoreExist(request):
     return exists
 
 
+
 def VerifyCustomerStoreInformation(request, error):
     load_dotenv()
     
@@ -174,6 +175,7 @@ def VerifyCustomerIndividualExist(request):
     exists = CustomerIndividual.objects.filter(id=IndividualID).exists()
 
     return exists
+
 
 
 def VerifyCustomerIndividualInformation(request, error):

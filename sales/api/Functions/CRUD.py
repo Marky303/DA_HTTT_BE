@@ -366,10 +366,59 @@ def CreateNewSalesOrderHeader(request):
     
 
 # Edit sales order  
-def SaveNewSalesOrder(request):
-    pass
+def SaveNewSalesOrderHeader(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    salesOrderInfo = ast.literal_eval(dict)
+
+    # Get Sales order info from dict
+    salesOrderID    = salesOrderInfo['id']
+    OrderDate       = salesOrderInfo['OrderDate']
+    DueDate         = salesOrderInfo['DueDate']
+    ShipDate        = salesOrderInfo['ShipDate']
+    ShipMethod      = salesOrderInfo['ShipMethod']
+    TaxAmt          = salesOrderInfo['TaxAmt']
+    Freight         = salesOrderInfo['Freight']
+    Comment         = salesOrderInfo['Comment']
+    territory       = Territory.objects.get(id=salesOrderInfo['territoryID'])
+    customer        = Customer.objects.get(id=salesOrderInfo['customerID'])
+    user            = request.user    
+    
+    # Get sales order object
+    salesOrder      = SalesOrderHeader.objects.get(id=salesOrderID)
+    
+    # Create new sales order header object
+    salesOrder.OrderDate    = OrderDate
+    salesOrder.DueDate      = DueDate
+    salesOrder.ShipDate     = ShipDate
+    salesOrder.ShipMethod   = ShipMethod
+    salesOrder.TaxAmt       = TaxAmt
+    salesOrder.Freight      = Freight
+    salesOrder.Comment      = Comment
+    salesOrder.Employee     = user
+    salesOrder.Territory    = territory
+    salesOrder.Customer     = customer
+    
+    # Save object to database
+    salesOrder.save()
+    
+    # Return id for further processing
+    return salesOrder.id
 
 
+
+# Delete all sales order detail from a sales order header
+def DeleteAllSalesOrderDetail(headerID):
+    # Get sales order header object
+    salesOrderHeader        = SalesOrderHeader.objects.get(id=headerID)
+    
+    # Get sales order detail list
+    salesOrderDetailList    = SalesOrderDetail.objects.filter(SalesOrder=salesOrderHeader)
+    
+    # Delete the list
+    for salesOrderDetail in salesOrderDetailList:
+        salesOrderDetail.delete()
+    
 
 # Delete sales order
 def DeleteSalesOrderWithID(request):

@@ -175,7 +175,7 @@ class SalesOrderHeader(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.id) + ": " + str(self.SubTotal)
+        return "SalesOrder " + str(self.id) + " | " + str(self.SubTotal) + " $"
 
 
 
@@ -198,4 +198,4 @@ class SalesOrderDetail(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.id) + ": " + str(self.LineTotal)
+        return "SalesOrder " + str(self.SalesOrder.id) + " | " + str(self.LineTotal) + " $"

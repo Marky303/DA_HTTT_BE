@@ -400,6 +400,40 @@ def CreateSalesOrder(request):
 
 
 
+# Edit sales order
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def EditSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Verify sales order information
+        # TODO
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # CRUD
+        headerID = SaveNewSalesOrderHeader(request)
+        DeleteAllSalesOrderDetail(headerID)
+        CreateNewSalesOrderDetail(request, headerID)
+        
+        # Response
+        return ResponseSuccessful("Edited salesorder info")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+
+
+
 # Delete a salesorder
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -430,6 +464,7 @@ def DeleteSalesOrder(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error)
+
 
 
 # Customer related_______________________________________________________________
