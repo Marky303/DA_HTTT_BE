@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer       
-
 from sales.models import *
 
+# Normal serializers___________________________________________________
 # Special offer serializer
 class SpecialOfferSerializer(ModelSerializer):
     class Meta:
@@ -20,11 +20,35 @@ class TerritorySerializer(ModelSerializer):
         model = Territory
         fields = '__all__'
 
-class ProductInfoSerializer(ModelSerializer):    
+class ProductSerializer(ModelSerializer):    
     class Meta:
         model = Product
         fields = '__all__'
         
+        
+        
+# Sales order related serializer_______________________________________
+# Sales order detail serializer
+class SalesOrderDetailSerializer(ModelSerializer):
+    # Nested serializer
+    Product = ProductSerializer(many=False)
+    
+    class Meta:
+        model = SalesOrderDetail
+        fields = '__all__'
+
+# Sales order header serializer
+class SalesOrderHeaderSerializer(ModelSerializer):
+    # Nested serializer
+    SalesOrderDetail = SalesOrderDetailSerializer(many=True)
+    
+    class Meta:
+        model = SalesOrderHeader
+        fields = '__all__'
+
+
+
+# Customer related serializer__________________________________________
 class CustomerStoreInfoSerializer(ModelSerializer):
     class Meta:
         model = CustomerStore
@@ -34,7 +58,6 @@ class CustomerIndividualInfoSerializer(ModelSerializer):
     class Meta:
         model = CustomerIndividual
         fields = '__all__'
-        
         
         
 # EXAMPLE SERIALIZER FOR TESTING

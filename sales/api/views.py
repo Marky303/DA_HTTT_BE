@@ -152,7 +152,7 @@ def DeleteSpecialOffer(request):
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
     product = Product.objects.all()
-    serializer = ProductInfoSerializer(product, many=True)
+    serializer = ProductSerializer(product, many=True)
     return Response(serializer.data)
 
 
@@ -356,7 +356,6 @@ def DeleteSpecialOfferProduct(request):
 
 
 # Territory related______________________________________________________________
-# Get all territories view
 # Get all territory view
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -364,6 +363,138 @@ def GetTerritory(request):
     territoryList = GetAllTerritory()
     serializer = TerritorySerializer(territoryList, many=True)  
     return Response(serializer.data)
+
+
+
+# Sale order related_____________________________________________________________
+# Create sales order
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def CreateSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Verify sales order information
+        # TODO
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # CRUD
+        headerID = CreateNewSalesOrderHeader(request)
+        CreateNewSalesOrderDetail(request, headerID)
+        
+        # Response
+        return ResponseSuccessful("Created new salesorder")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+
+
+
+# Edit sales order
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def EditSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Verify sales order information
+        # TODO
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # CRUD
+        headerID = SaveNewSalesOrderHeader(request)
+        DeleteAllSalesOrderDetail(headerID)
+        CreateNewSalesOrderDetail(request, headerID)
+        
+        # Response
+        return ResponseSuccessful("Edited salesorder info")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+
+
+
+# Delete a salesorder
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def DeleteSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if sales order doesnt exist for deleting
+        if not VerifySalesOrderExist(request):
+            raise Exception("Sales order does not exist!")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Edit sales order
+        DeleteSalesOrderWithID(request)        
+        
+        # Response
+        return ResponseSuccessful("Deleted sales order")
+    
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+    
+
+
+# Get all salesorder
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetAllSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get all sales order
+        salesOrderList =  SalesOrderHeader.objects.all()
+        
+        # Create serializer for special offer
+        serializer = SalesOrderHeaderSerializer(salesOrderList, many=True)  
+        
+        # Response
+        return Response(serializer.data)
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
 
 
 
@@ -407,6 +538,7 @@ def EditCustomerStoreInformation(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error)    
+
 
 
 # Create new Special Offer

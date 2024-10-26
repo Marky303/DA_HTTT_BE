@@ -82,7 +82,7 @@ class Territory(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return self.TerritoryID + ". " + self.Name
+        return str(self.id) + ". " + self.Name
 
 
 
@@ -147,7 +147,7 @@ class Customer(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return str(self.CustomerID)
+        return str(self.id)
     
 
 
@@ -175,7 +175,7 @@ class SalesOrderHeader(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.id) + ": " + str(self.SubTotal)
+        return "SalesOrder " + str(self.id) + " | " + str(self.SubTotal) + " $"
 
 
 
@@ -192,10 +192,10 @@ class SalesOrderDetail(models.Model):
     LineTotal               = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    SalesOrder              = models.ForeignKey(SalesOrderHeader, on_delete=models.CASCADE, null=True)
+    SalesOrder              = models.ForeignKey(SalesOrderHeader, related_name='SalesOrderDetail', on_delete=models.CASCADE, null=True)
     Product                 = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     SpecialOffer            = models.ForeignKey(SpecialOffer, on_delete=models.SET_NULL, null=True)
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.SalesOrderDetailID) + ": " + str(self.LineTotal)
+        return "SalesOrder " + str(self.SalesOrder.id) + " | " + str(self.LineTotal) + " $"
