@@ -99,6 +99,22 @@ def VerifySpecialOfferProductExist(request):
     return exists
     
     
+    
+# Sales order related__________________________________________________________________
+def VerifySalesOrderExist(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    salesOrder = ast.literal_eval(dict)
+    
+    # Get salesorderheader id from dict
+    salesOrderHeaderID   = salesOrder['salesOrderHeaderID']
+    
+    # Check if sales order exist
+    exists = SalesOrderHeader.objects.filter(id=salesOrderHeaderID).exists()
+    
+    return exists
+
+
 
 # Customer related_____________________________________________________________________
 def VerifyCustomerStoreExist(request):    

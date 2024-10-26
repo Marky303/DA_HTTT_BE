@@ -400,6 +400,38 @@ def CreateSalesOrder(request):
 
 
 
+# Delete a salesorder
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def DeleteSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if sales order doesnt exist for deleting
+        if not VerifySalesOrderExist(request):
+            raise Exception("Sales order does not exist!")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Edit sales order
+        DeleteSalesOrderWithID(request)        
+        
+        # Response
+        return ResponseSuccessful("Deleted sales order")
+    
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+
+
 # Customer related_______________________________________________________________
 # Get customer store information view
 @api_view(['GET'])

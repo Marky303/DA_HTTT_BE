@@ -324,12 +324,7 @@ def CreateNewSalesOrderDetail(request, headerID):
     salesOrderHeader.SubTotal = subTotal
     salesOrderHeader.TotalDue = subTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt
     salesOrderHeader.save()
-                
-                
-            
-        
-        
-        
+                    
         
 
 # Create sales order header
@@ -367,6 +362,29 @@ def CreateNewSalesOrderHeader(request):
     
     # Return id for further processing
     return salesOrderHeader.id
+    
+    
+
+# Edit sales order  
+def SaveNewSalesOrder(request):
+    pass
+
+
+
+# Delete sales order
+def DeleteSalesOrderWithID(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    salesOrder = ast.literal_eval(dict)
+    
+    # Get salesorderheader id from dict
+    salesOrderHeaderID   = salesOrder['salesOrderHeaderID']
+    
+    # Get sales order object
+    salesOrder            = SalesOrderHeader.objects.get(id=salesOrderHeaderID)
+    
+    # Delete sales order object
+    salesOrder.delete()
     
     
 
