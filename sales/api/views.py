@@ -152,7 +152,7 @@ def DeleteSpecialOffer(request):
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
     product = Product.objects.all()
-    serializer = ProductInfoSerializer(product, many=True)
+    serializer = ProductSerializer(product, many=True)
     return Response(serializer.data)
 
 
@@ -459,6 +459,37 @@ def DeleteSalesOrder(request):
         # Response
         return ResponseSuccessful("Deleted sales order")
     
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
+    
+
+
+# Get all salesorder
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetAllSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get all sales order
+        salesOrderList =  SalesOrderHeader.objects.all()
+        
+        # Create serializer for special offer
+        serializer = SalesOrderHeaderSerializer(salesOrderList, many=True)  
+        
+        # Response
+        return Response(serializer.data)
     except Exception as e:
         # Response a error code and error content
         if str(e):

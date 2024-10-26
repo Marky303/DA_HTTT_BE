@@ -192,7 +192,7 @@ class SalesOrderDetail(models.Model):
     LineTotal               = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    SalesOrder              = models.ForeignKey(SalesOrderHeader, on_delete=models.CASCADE, null=True)
+    SalesOrder              = models.ForeignKey(SalesOrderHeader, related_name='SalesOrderDetail', on_delete=models.CASCADE, null=True)
     Product                 = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     SpecialOffer            = models.ForeignKey(SpecialOffer, on_delete=models.SET_NULL, null=True)
     
