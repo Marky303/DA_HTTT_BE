@@ -11,10 +11,15 @@
 > [!WARNING]
 > Now install Jupyter notebook dependencies
 ```
-    pip install django-extensions jupyter notebook==6.5.6
+    pip install django-extensions jupyter notebook==6.5.6 psycopg[binary]
 ```
 
+
+
 ## 2.How to use
+```
+python manage.py shell_plus --notebook
+```
 
 
 
