@@ -82,7 +82,7 @@ class Territory(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return self.TerritoryID + ". " + self.Name
+        return str(self.id) + ". " + self.Name
 
 
 
@@ -147,7 +147,7 @@ class Customer(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return str(self.CustomerID)
+        return str(self.id)
     
 
 
@@ -198,4 +198,4 @@ class SalesOrderDetail(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.SalesOrderDetailID) + ": " + str(self.LineTotal)
+        return "Order " + str(self.id) + ": " + str(self.LineTotal)

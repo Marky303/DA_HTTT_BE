@@ -25,6 +25,9 @@ urlpatterns = [
     path('editproductinformation/'      , views.EditProductInformation),
     path('deleteproduct/'               , views.DeleteProduct),
     
+    # Salesorder related
+    path('createsalesorder/'            , views.CreateSalesOrder),
+    
     # Customer store related
     path('getcustomerstoreinformation/'  , views.GetCustomerStoreInformation),
     path('createcustomerstore/'          , views.CreateCustomerStore),

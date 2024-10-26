@@ -1,4 +1,8 @@
 import ast
+from datetime import datetime
+import random
+import string
+from decimal import Decimal
 
 # Import models
 from sales.models import *
@@ -237,6 +241,134 @@ def DeleteProductWithID(request):
     product.delete()
 
 
+
+# Sales order related_________________________________________________________________
+# Generate random carrier tracking number func
+def CreateCarrierTrackingNumber():
+    X = ''.join(random.choice(string.ascii_uppercase) for _ in range(4))
+    Y = ''.join(random.choice(string.digits) for _ in range(2))
+    Z = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(3))
+    return f"{X}-{Y}-{Z}"
+
+
+
+# Create sales order details
+def CreateNewSalesOrderDetail(request, headerID):
+    # Get Sales order header object
+    salesOrderHeader = SalesOrderHeader.objects.get(id=headerID)
+    
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    salesOrderInfo      = ast.literal_eval(dict)
+    salesOrderDetails   = salesOrderInfo["SalesOrderDetails"]
+    
+    # Calculate subTotal for SalesOrderHeader 
+    subTotal = Decimal(0)
+    
+    for salesOrderDetail in salesOrderDetails:
+        # 0.Get SalesOrderDetail infos
+        productID       = salesOrderDetail['productID']
+        OrderQty        = salesOrderDetail['OrderQty']
+        
+        # 1.Get product object
+        product         = Product.objects.get(id=productID)
+        
+        # 2.Automatically apply special offer
+        # Get special offer - products
+        specialOfferProducts        = SpecialOfferProduct.objects.filter(Product=product)
+        
+        # Filter special offers
+        highestDiscount = Decimal(0)
+        bestSpecialOffer = None
+        for specialOfferProduct in specialOfferProducts:            
+            # Get special offer
+            specialOffer = specialOfferProduct.SpecialOffer 
+            
+            # Check if current date is valid
+            currentDate = datetime.now()
+            if not specialOffer.StartDate.replace(tzinfo=None) <= currentDate <= specialOffer.EndDate.replace(tzinfo=None):
+                continue
+            
+            # Check if quantity is valid
+            if not specialOffer.MinQty <= OrderQty <= specialOffer.MaxQty:
+                continue
+            
+            # Check highest rate
+            if highestDiscount < specialOffer.DiscountPct:
+                highestDiscount = specialOffer.DiscountPct
+                bestSpecialOffer = specialOffer
+           
+        # 3.Calculate LineTotal
+        LineTotal = Decimal(OrderQty) * product.ListPrice * (1 - highestDiscount)
+                
+        # 4.Generate carrier tracking number
+        CarrierTrackingNumber = CreateCarrierTrackingNumber()
+                
+        # 5.Create SalesHeaderDetail
+        salesOrderDetail = SalesOrderDetail(CarrierTrackingNumber=CarrierTrackingNumber,
+                                            OrderQty=OrderQty,
+                                            UnitPrice=product.ListPrice,
+                                            UnitPriceDiscount=highestDiscount,
+                                            LineTotal=LineTotal,
+                                            SpecialOffer=bestSpecialOffer,
+                                            Product=product,
+                                            SalesOrder=salesOrderHeader)
+        
+        # 6.Save SalesHeaderDetail
+        salesOrderDetail.save()
+        
+        # 7.Add to SubTotal 
+        subTotal += LineTotal
+                
+    # Update subTotal and other numbers of sales order
+    salesOrderHeader.SubTotal = subTotal
+    salesOrderHeader.TotalDue = subTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt
+    salesOrderHeader.save()
+                
+                
+            
+        
+        
+        
+        
+
+# Create sales order header
+def CreateNewSalesOrderHeader(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    salesOrderInfo = ast.literal_eval(dict)
+
+    # Get Sales order info from dict
+    OrderDate   = salesOrderInfo['OrderDate']
+    DueDate     = salesOrderInfo['DueDate']
+    ShipDate    = salesOrderInfo['ShipDate']
+    ShipMethod  = salesOrderInfo['ShipMethod']
+    TaxAmt      = salesOrderInfo['TaxAmt']
+    Freight     = salesOrderInfo['Freight']
+    Comment     = salesOrderInfo['Comment']
+    territory   = Territory.objects.get(id=salesOrderInfo['territoryID'])
+    customer    = Customer.objects.get(id=salesOrderInfo['customerID'])
+    user        = request.user    
+    
+    # Create new sales order header object
+    salesOrderHeader = SalesOrderHeader(OrderDate=OrderDate,
+                                        DueDate=DueDate,
+                                        ShipDate=ShipDate,
+                                        ShipMethod=ShipMethod,
+                                        TaxAmt=TaxAmt,
+                                        Freight=Freight,
+                                        Comment=Comment,
+                                        Employee=user,
+                                        Territory=territory,
+                                        Customer=customer)
+    
+    # Save object to database
+    salesOrderHeader.save()
+    
+    # Return id for further processing
+    return salesOrderHeader.id
+    
+    
 
 # Customer related____________________________________________________________________
 def GetAllCustomerStore():

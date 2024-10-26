@@ -356,7 +356,6 @@ def DeleteSpecialOfferProduct(request):
 
 
 # Territory related______________________________________________________________
-# Get all territories view
 # Get all territory view
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -364,6 +363,40 @@ def GetTerritory(request):
     territoryList = GetAllTerritory()
     serializer = TerritorySerializer(territoryList, many=True)  
     return Response(serializer.data)
+
+
+
+# Sale order related_____________________________________________________________
+# Create sales order
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def CreateSalesOrder(request):
+    try:
+        error = []
+    
+        # Verify is user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Verify sales order information
+        # TODO
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # CRUD
+        headerID = CreateNewSalesOrderHeader(request)
+        CreateNewSalesOrderDetail(request, headerID)
+        
+        # Response
+        return ResponseSuccessful("Created new salesorder")
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error)
 
 
 
@@ -407,6 +440,7 @@ def EditCustomerStoreInformation(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error)    
+
 
 
 # Create new Special Offer
