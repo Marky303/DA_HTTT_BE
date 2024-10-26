@@ -61,12 +61,12 @@ class Product(models.Model):
     
 class SpecialOfferProduct(models.Model):
     # Foreign keys
-    SpecialOfferID  = models.ForeignKey(SpecialOffer, on_delete=models.CASCADE, null=False)
-    ProductID       = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
+    SpecialOffer    = models.ForeignKey(SpecialOffer, on_delete=models.CASCADE, null=False)
+    Product         = models.ForeignKey(Product, on_delete=models.CASCADE, null=False)
 
     # Admin page default function
     def __str__(self):
-        return "Special Offer and Product: " + str(self.SpecialOfferID) + " + " + str(self.ProductID)
+        return "Special Offer and Product: " + str(self.SpecialOffer) + " + " + str(self.Product)
 
 
 
@@ -82,7 +82,7 @@ class Territory(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return self.TerritoryID + ". " + self.Name
+        return str(self.id) + ". " + self.Name
 
 
 
@@ -102,10 +102,10 @@ class CustomerStore(models.Model):
     SquareFeet          = models.PositiveIntegerField(null=True)
     NumberOfEmployees   = models.PositiveIntegerField(null=True)
     
-    City                = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    AddressLine1        = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    AddressLine2        = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
-    CountryRegionName   = models.CharField(max_length=decimalMaxDigit, null=True, blank=True)
+    City                = models.CharField(max_length=shortLength, null=True, blank=True)
+    AddressLine1        = models.CharField(max_length=mediumLength, null=True, blank=True)
+    AddressLine2        = models.CharField(max_length=mediumLength, null=True, blank=True)
+    CountryRegionName   = models.CharField(max_length=shortLength, null=True, blank=True)
     
     # Admin page default function
     def __str__(self):
@@ -122,7 +122,7 @@ class CustomerIndividual(models.Model):
     MiddleName          = models.CharField(max_length=decimalMaxDigit, blank=False, null=True)
     
     Title               = models.CharField(max_length=shortLength, blank=False)         
-    EmailAdress         = models.CharField(max_length=mediumLength, blank=False)  
+    EmailAddress        = models.CharField(max_length=mediumLength, blank=False)  
     PhoneNumber         = models.CharField(max_length=decimalMaxDigit, validators=[phone_number_validator], blank=False)
     
     City                = models.CharField(max_length=shortLength, null=True, blank=True)
@@ -132,7 +132,7 @@ class CustomerIndividual(models.Model):
     
     # Admin page default function
     def __str__(self):
-        return self.FirstName + " " + self.LastName + " / " + self.EmailAdress
+        return self.FirstName + " " + self.LastName + " / " + self.EmailAddress
     
     
 class Customer(models.Model):
@@ -140,14 +140,14 @@ class Customer(models.Model):
     # CustomerID              = models.IntegerField(primary_key=True)
     
     # Foreign keys
-    EmployeeID              = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
-    TerritoryID             = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
-    CustomerStoreID         = models.ForeignKey(CustomerStore, on_delete=models.SET_NULL, null=True)
-    CustomerIndividualID    = models.ForeignKey(CustomerIndividual, on_delete=models.SET_NULL, null=True)
+    Employee                = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    Territory               = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
+    CustomerStore           = models.ForeignKey(CustomerStore, on_delete=models.SET_NULL, null=True)
+    CustomerIndividual      = models.ForeignKey(CustomerIndividual, on_delete=models.SET_NULL, null=True)
     
     # Admin page default function
     def __str__(self):
-        return str(self.CustomerID)
+        return str(self.id)
     
 
 
@@ -169,13 +169,13 @@ class SalesOrderHeader(models.Model):
     TotalDue        = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    EmployeeID              = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
-    CustomerID              = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
-    TerritoryID             = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
+    Employee                = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    Customer                = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    Territory               = models.ForeignKey(Territory, on_delete=models.SET_NULL, null=True)
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.id) + ": " + str(self.SubTotal)
+        return "SalesOrder " + str(self.id) + " | " + str(self.SubTotal) + " $"
 
 
 
@@ -192,10 +192,10 @@ class SalesOrderDetail(models.Model):
     LineTotal               = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    SalesOrderID            = models.ForeignKey(SalesOrderHeader, on_delete=models.CASCADE, null=False)
-    ProductID               = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    SpecialOfferID          = models.ForeignKey(SpecialOffer, on_delete=models.SET_NULL, null=True)
+    SalesOrder              = models.ForeignKey(SalesOrderHeader, related_name='SalesOrderDetail', on_delete=models.CASCADE, null=True)
+    Product                 = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    SpecialOffer            = models.ForeignKey(SpecialOffer, on_delete=models.SET_NULL, null=True)
     
     # Admin page default function
     def __str__(self):
-        return "Order " + str(self.SalesOrderDetailID) + ": " + str(self.LineTotal)
+        return "SalesOrder " + str(self.SalesOrder.id) + " | " + str(self.LineTotal) + " $"

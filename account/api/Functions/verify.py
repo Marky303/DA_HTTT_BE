@@ -34,9 +34,9 @@ def VerifyEmployeeInformation(request):
         except:
             pass
     
-    #.2 Check if any field is empty
-    if any(value in ('', None, []) for value in userinfo.values()):
-        error.append("Fields must not be empty")
+    #.2 Check if any field is empty (DONT DO THIS)
+    # if any(value in ('', None, []) for value in userinfo.values()):
+    #     error.append("Fields must not be empty")
 
     #.3 Check if phone number is correct
     if not re.fullmatch(phone_number_pattern, userinfo['PhoneNumber']):

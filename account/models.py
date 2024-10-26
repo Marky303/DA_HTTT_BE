@@ -58,13 +58,3 @@ class Employee(AbstractBaseUser, PermissionsMixin):
     # Admin page default function
     def __str__(self):
         return self.name 
-
-# EXAMPLE MODEL FOR TESTING
-class Note(models.Model):
-    # Foreign key
-    user = models.ForeignKey(Employee, on_delete=models.CASCADE, null=True)
-    body = models.TextField()
-    
-    # Admin page default function
-    def __str__(self):
-        return self.body

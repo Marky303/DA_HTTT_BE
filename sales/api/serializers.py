@@ -1,0 +1,47 @@
+from rest_framework.serializers import ModelSerializer       
+from sales.models import *
+
+# Normal serializers___________________________________________________
+# Special offer serializer
+class SpecialOfferSerializer(ModelSerializer):
+    class Meta:
+        model = SpecialOffer
+        fields = '__all__'
+        
+# Special offer - product serializer
+class SpecialOfferProductSerializer(ModelSerializer):
+    class Meta:
+        model = SpecialOfferProduct
+        fields = '__all__'
+        
+# Territory serializer
+class TerritorySerializer(ModelSerializer):
+    class Meta:
+        model = Territory
+        fields = '__all__'
+
+class ProductSerializer(ModelSerializer):    
+    class Meta:
+        model = Product
+        fields = '__all__'
+        
+        
+        
+# Sales order related serializer_______________________________________
+# Sales order detail serializer
+class SalesOrderDetailSerializer(ModelSerializer):
+    # Nested serializer
+    Product = ProductSerializer(many=False)
+    
+    class Meta:
+        model = SalesOrderDetail
+        fields = '__all__'
+
+# Sales order header serializer
+class SalesOrderHeaderSerializer(ModelSerializer):
+    # Nested serializer
+    SalesOrderDetail = SalesOrderDetailSerializer(many=True)
+    
+    class Meta:
+        model = SalesOrderHeader
+        fields = '__all__'
