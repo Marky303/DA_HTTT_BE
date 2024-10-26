@@ -45,28 +45,3 @@ class SalesOrderHeaderSerializer(ModelSerializer):
     class Meta:
         model = SalesOrderHeader
         fields = '__all__'
-
-
-
-# Customer related serializer__________________________________________
-class CustomerStoreInfoSerializer(ModelSerializer):
-    class Meta:
-        model = CustomerStore
-        fields = '__all__'
-        
-class CustomerIndividualInfoSerializer(ModelSerializer):
-    class Meta:
-        model = CustomerIndividual
-        fields = '__all__'
-        
-        
-# EXAMPLE SERIALIZER FOR TESTING
-# Note model for testing
-# from sales.models import Note
-# from rest_framework.serializers import ModelSerializer        
-
-# # Note serializer
-# class NoteSerializer(ModelSerializer):
-#     class Meta:
-#         model = Note
-#         fields = '__all__'
