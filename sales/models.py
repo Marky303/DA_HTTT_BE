@@ -51,8 +51,8 @@ class Product(models.Model):
     WarrantyPeriod  = models.CharField(max_length=shortLength, blank=True, null=True)
     RiderExperience = models.CharField(max_length=mediumLength, blank=True, null=True)
     Description     = models.CharField(max_length=longLength, blank=True, null=True)
-    Size            = models.CharField(max_length=shortLength, blank=False, null=False)
-    Style           = models.CharField(max_length=shortLength, blank=False, null=False)
+    Size            = models.CharField(max_length=shortLength, blank=True, null=True)
+    Style           = models.CharField(max_length=shortLength, blank=True, null=True)
     
     StandardCost    = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, default=0)
     ListPrice       = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, default=0)
