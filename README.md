@@ -11,7 +11,7 @@
 > [!WARNING]
 > Now install Jupyter notebook dependencies
 ```
-    pip install django-extensions jupyter notebook==6.5.6 psycopg[binary]
+    pip install django-extensions jupyter notebook==6.5.6 psycopg[binary] tqdm
 ```
 
 
