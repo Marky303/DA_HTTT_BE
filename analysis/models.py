@@ -58,11 +58,12 @@ class ProductDim(models.Model):
     
 class SpecialOfferDim(models.Model):
     # Normal fields 
+    Name            = models.CharField(max_length=mediumLength, blank=False, null=False, default="No discount")
     DiscountPct     = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, validators=[MinValueValidator(0), MaxValueValidator(1)])
     
     # Admin page default function
     def __str__(self):
-        return str(self.id) + " | " + str(self.DiscountPct) + "%" + " off"
+        return str(self.id) + ". " + self.Name + " " + str(self.DiscountPct) + "%" + " off"
 
 
 # FACTS___________________________________________________________________________
