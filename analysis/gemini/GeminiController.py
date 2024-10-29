@@ -2,7 +2,7 @@ import ast
 
 # Import functions
 from analysis.gemini.Functions.GetPromptContent import GetPromptContent
-from analysis.gemini.Functions.GenerateResponse import GenerateResponse
+from analysis.gemini.Functions.GenerateResponse import *
 
 # Call functions
 from analysis.gemini.QueryGraphAnalysis import Query, Graph
@@ -13,7 +13,7 @@ def GeminiController(request):
     prompt          = GetPromptContent(request)
     
     # Generate response from gemini
-    response        = GenerateResponse(prompt)
+    response        = GenerateInitialResponse(prompt)
     
     # Define the final result
     result = {
@@ -28,11 +28,15 @@ def GeminiController(request):
         # Check if it is a query function
         if fc.name == "QueryPostgresDatamart":
             # Query and append query result to the final result
-            queryResult     = Query(fc.args['query'])
+            queryResult         = Query(fc.args['query'])
             result['list'].append(queryResult)
             
+            # Explain the query... like bruh
+            queryExplainResult  = GenerateQueryExplaination(queryResult['query'])
+            result['list'].append(queryExplainResult)
+            
             # Draw a graph and append the graph to the final result???
-            graphResult     = Graph(fc.args['graphType'], fc.args['graphName'])
+            graphResult         = Graph(fc.args['graphType'], fc.args['graphName'])
             
             
             # Get some sort of overview and append to the final result??

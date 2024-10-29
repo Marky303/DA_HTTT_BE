@@ -9,7 +9,7 @@ from analysis.gemini.QueryGraphAnalysis import QueryPostgresDatamart
 
 
 # Generate response from gemini
-def GenerateResponse(prompt):
+def GenerateInitialResponse(prompt):
     load_dotenv()
     
     try:
@@ -18,7 +18,6 @@ def GenerateResponse(prompt):
         instructionFile         = open(instructionFilePath) 
         instruction             = instructionFile.read()
 
-        
         # Create model object
         genai.configure(api_key=os.getenv("GOOGLE_AI_API_KEY"))
         model = genai.GenerativeModel(
@@ -33,11 +32,52 @@ def GenerateResponse(prompt):
         # Generate response
         chat = model.start_chat()
         response = chat.send_message(prompt)
-
-        # # Get response object
-        # responseObject = response._result.candidates[0].content
         
         return response
+            
+    except Exception as e:
+        # Notify
+        print(f"An error occurred when generating response: {e}")
+        return None
+    
+    
+# Generate explaination for the query
+def GenerateQueryExplaination(query):
+    load_dotenv()
+    
+    try:
+        # Get system instruction
+        instructionFilePath     = str(settings.BASE_DIR) + "\\analysis\\gemini\\templates\\InstructionTemplate.txt"
+        instructionFile         = open(instructionFilePath) 
+        instruction             = instructionFile.read()
+
+        # Create model object
+        genai.configure(api_key=os.getenv("GOOGLE_AI_API_KEY"))
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction=instruction
+        )
+
+        # Get prompt
+        queryExplainPromptFilePath  = str(settings.BASE_DIR) + "\\analysis\\gemini\\templates\\QueryExplainationPrompt.txt"
+        queryExplainPromptFile      = open(queryExplainPromptFilePath) 
+        queryExplainPrompt          = queryExplainPromptFile.read()
+        
+        queryExplainPrompt          = queryExplainPrompt.replace("<query>", query)
+        
+        print(queryExplainPrompt)
+        
+        # Generate response
+        chat = model.start_chat()
+        response = chat.send_message(queryExplainPrompt)
+        
+        # Create result dict
+        textResponse = {
+            "type": "text",
+            "content": response.text
+        }
+        
+        return textResponse
             
     except Exception as e:
         # Notify

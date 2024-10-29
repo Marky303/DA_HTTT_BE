@@ -1,0 +1,3 @@
+Explain this query. You do not need to explain the SQL syntax, just explain the steps of this query and finally sum it up.
+
+<query>

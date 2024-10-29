@@ -67,7 +67,7 @@ def Query(query):
     # Preprocess the query (adding quotation marks...)
     processedQuery = PreprocessQuery(query)
     
-    print(processedQuery)
+    # print(processedQuery)
     
     # Create result object
     result = {
@@ -100,4 +100,5 @@ def Query(query):
 
 # GRAPH RELATED____________________________________________________________
 def Graph(graphType, graphName):
-    print(graphType + graphName)
+    # print(graphType + graphName)
+    pass
