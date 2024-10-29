@@ -5,7 +5,7 @@ import google.generativeai as genai
 from django.conf import settings
 
 # Call functions
-from analysis.gemini.CallFunctions.QueryGraphAnalysis import QueryPostgresDatamart
+from analysis.gemini.QueryGraphAnalysis import QueryPostgresDatamart
 
 
 # Generate response from gemini

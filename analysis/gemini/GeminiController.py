@@ -5,7 +5,7 @@ from analysis.gemini.Functions.GetPromptContent import GetPromptContent
 from analysis.gemini.Functions.GenerateResponse import GenerateResponse
 
 # Call functions
-from analysis.gemini.CallFunctions.QueryGraphAnalysis import Query, Graph
+from analysis.gemini.QueryGraphAnalysis import Query, Graph
 
 # Process the prompt and return a JSON analysis result object
 def GeminiController(request):
@@ -32,7 +32,7 @@ def GeminiController(request):
             result['list'].append(queryResult)
             
             # Draw a graph and append the graph to the final result???
-            graphResult     = Graph(fc.args['graphType'])
+            graphResult     = Graph(fc.args['graphType'], fc.args['graphName'])
             
             
             # Get some sort of overview and append to the final result??
