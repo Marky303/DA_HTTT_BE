@@ -1,4 +1,4 @@
-import ast
+import time
 
 # Import functions
 from analysis.gemini.Functions.GetPromptContent import GetPromptContent
@@ -9,6 +9,9 @@ from analysis.gemini.QueryGraphAnalysis import Query, Graph
 
 # Process the prompt and return a JSON analysis result object
 def GeminiController(request):
+    # Record start time
+    start_time = time.time()
+    
     # Get user prompt content
     prompt          = GetPromptContent(request)
     
@@ -54,6 +57,17 @@ def GeminiController(request):
             "content": response.text
         }
         result['list'].append(textResponse)
+    
+    # Calculate elapsed time
+    end_time = time.time()  # Record the end time
+    elapsed_time = end_time - start_time
+    
+    # Create a text and append to the final result
+    elapsedResponse = {
+        "type": "elapsedTime",
+        "content": "Elapsed time: " + str(elapsed_time)
+    }
+    result['list'].append(elapsedResponse)
     
     # Return a dictionary
     return result
