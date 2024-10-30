@@ -65,8 +65,6 @@ def GenerateQueryExplaination(query):
         
         queryExplainPrompt          = queryExplainPrompt.replace("<query>", query)
         
-        print(queryExplainPrompt)
-        
         # Generate response
         chat = model.start_chat()
         response = chat.send_message(queryExplainPrompt)
