@@ -178,7 +178,7 @@ def SaveNewProduct(request):
     Size                = productInfo['Size']
     Style               = productInfo['Style']
     
-    #Get product
+    # Get product
     product = Product.objects.get(id=productID)
     
     
@@ -205,7 +205,7 @@ def CreateNewProduct(request):
     dict = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
     
-    # Get special offer info from dict
+    # Get product info from dict
     Name                = productInfo['Name']
     Manufacturer        = productInfo['Manufacturer']
     Summary             = productInfo['Summary']
@@ -217,10 +217,10 @@ def CreateNewProduct(request):
     Size                = productInfo['Size']
     Style               = productInfo['Style']
     
-    # Create new special offer object
+    # Create new product object
     product = Product(Name=Name, Manufacturer=Manufacturer, Summary=Summary, WarrantyPeriod=WarrantyPeriod, RiderExperience=RiderExperience, Description=Description, ListPrice=ListPrice, StandardCost=StandardCost, Size=Size, Style=Style)
     
-    # Save new special offer object
+    # Save new product object
     product.save()
 
 
@@ -231,13 +231,13 @@ def DeleteProductWithID(request):
     dict = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
     
-    # Get special offer id from dict
+    # Get product id from dict
     ProductID   = productInfo['productID']
     
-    # Get special offer object
+    # Get product object
     product     = Product.objects.get(id=ProductID)
     
-    # Delete special offer object
+    # Delete product object
     product.delete()
 
 
@@ -447,37 +447,21 @@ def SaveNewCustomerStore(request):
     customerStore = ast.literal_eval(dict)
     
     # Extract new information from request
-    StoreID                 = customerStore['StoreID']
-    Name                    = customerStore['Name']
-    BusinessType            = customerStore['BusinessType']
-    Specialty               = customerStore['Specialty']
-    AnnualSales             = customerStore['AnnualSales']
-    AnnualRevenue           = customerStore['AnnualRevenue']
-    YearOpened              = customerStore['YearOpened']
-    SquareFeet              = customerStore['SquareFeet']
-    NumberOfEmployees       = customerStore['NumberOfEmployees']
-    City                    = customerStore['City']
-    AddressLine1            = customerStore['AddressLine1']
-    AddressLine2            = customerStore['AddressLine2']
-    CountryRegionName       = customerStore['CountryRegionName']
+    store = CustomerStore.objects.get(id=customerStore['StoreID'])
     
-    #Get product
-    store = CustomerStore.objects.get(id=StoreID)
-    
-    
-    # Change new employee infomation
-    store.Name                = Name
-    store.BusinessType        = BusinessType
-    store.Specialty           = Specialty
-    store.AnnualSales         = AnnualSales
-    store.AnnualRevenue       = AnnualRevenue
-    store.YearOpened          = YearOpened
-    store.SquareFeet          = SquareFeet
-    store.NumberOfEmployees   = NumberOfEmployees
-    store.City                = City
-    store.AddressLine1        = AddressLine1
-    store.AddressLine2        = AddressLine2
-    store.CountryRegionName   = CountryRegionName
+    # Change new customer store information
+    store.Name                    = customerStore['Name']
+    store.BusinessType            = customerStore['BusinessType']
+    store.Specialty               = customerStore['Specialty']
+    store.AnnualSales             = customerStore['AnnualSales']
+    store.AnnualRevenue           = customerStore['AnnualRevenue']
+    store.YearOpened              = customerStore['YearOpened']
+    store.SquareFeet              = customerStore['SquareFeet']
+    store.NumberOfEmployees       = customerStore['NumberOfEmployees']
+    store.City                    = customerStore['City']
+    store.AddressLine1            = customerStore['AddressLine1']
+    store.AddressLine2            = customerStore['AddressLine2']
+    store.CountryRegionName       = customerStore['CountryRegionName']
     
     # Save employee information
     store.save()
@@ -485,9 +469,9 @@ def SaveNewCustomerStore(request):
 def CreateNewCustomerStore(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    customerStore = ast.literal_eval(dict)
+    customerStore = ast.literal_eval(dict)["CustomerStore"]
     
-    # Get special offer info from dict
+    # Get customer store info from dict
     Name                    = customerStore['Name']
     BusinessType            = customerStore['BusinessType']
     Specialty               = customerStore['Specialty']
@@ -501,32 +485,29 @@ def CreateNewCustomerStore(request):
     AddressLine2            = customerStore['AddressLine2']
     CountryRegionName       = customerStore['CountryRegionName']
     
-    # Create new special offer object
+    # Create new customer store object
     store = CustomerStore(Name=Name, BusinessType=BusinessType, Specialty=Specialty, AnnualSales=AnnualSales, AnnualRevenue=AnnualRevenue, YearOpened=YearOpened, SquareFeet=SquareFeet, NumberOfEmployees=NumberOfEmployees, City=City, AddressLine1=AddressLine1, AddressLine2=AddressLine2, CountryRegionName=CountryRegionName)
         
-    # Save new special offer object
+    # Save new customer store object
     store.save()
+    
+    # Return store ID
+    return store.id
 
 def DeleteCustomerStoreWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerStore = ast.literal_eval(dict)
     
-    # Get special offer id from dict
+    # Get customer store id from dict
     StoreID   = customerStore['StoreID']
     
-    # Get special offer object
+    # Get customer store object
     store     = CustomerStore.objects.get(id=StoreID)
     
-    # Delete special offer object
+    # Delete customer store object
     store.delete()
-# 
-# 
-# 
-# 
-# 
-# 
-#    
+  
 def GetAllCustomerIndividual():
     return CustomerIndividual.objects.all()
 
@@ -536,43 +517,27 @@ def SaveNewCustomerIndividual(request):
     customerIndividual = ast.literal_eval(dict)
     
     # Extract new information from request
-    IndividualID            = customerIndividual['IndividualID']
-    FirstName               = customerIndividual['FirstName']
-    LastName                = customerIndividual['LastName']
-    MiddleName              = customerIndividual['MiddleName']
-    Title                   = customerIndividual['Title']
-    EmailAddress            = customerIndividual['EmailAddress']
-    PhoneNumber             = customerIndividual['PhoneNumber']
-    City                    = customerIndividual['City']
-    AddressLine1            = customerIndividual['AddressLine1']
-    AddressLine2            = customerIndividual['AddressLine2']
-    CountryRegionName       = customerIndividual['CountryRegionName']
+    individual = CustomerIndividual.objects.get(id=customerIndividual['IndividualID'])
+    individual.FirstName               = customerIndividual['FirstName']
+    individual.LastName                = customerIndividual['LastName']
+    individual.MiddleName              = customerIndividual['MiddleName']
+    individual.Title                   = customerIndividual['Title']
+    individual.EmailAddress            = customerIndividual['EmailAddress']
+    individual.PhoneNumber             = customerIndividual['PhoneNumber']
+    individual.City                    = customerIndividual['City']
+    individual.AddressLine1            = customerIndividual['AddressLine1']
+    individual.AddressLine2            = customerIndividual['AddressLine2']
+    individual.CountryRegionName       = customerIndividual['CountryRegionName']
     
-    #Get product
-    individual = CustomerIndividual.objects.get(id=IndividualID)
-    
-    
-    # Change new employee infomation
-    individual.FirstName                = FirstName
-    individual.LastName        = LastName
-    individual.MiddleName           = MiddleName
-    individual.Title         = Title
-    individual.EmailAddress       = EmailAddress
-    individual.PhoneNumber          = PhoneNumber
-    individual.City                = City
-    individual.AddressLine1        = AddressLine1
-    individual.AddressLine2        = AddressLine2
-    individual.CountryRegionName   = CountryRegionName
-    
-    # Save employee information
+    # Save customer individual information
     individual.save()
 
 def CreateNewCustomerIndividual(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    customerIndividual = ast.literal_eval(dict)
+    customerIndividual = ast.literal_eval(dict)["CustomerIndividual"]
     
-    # Get special offer info from dict
+    # Get customer individual info from dict
     FirstName               = customerIndividual['FirstName']
     LastName                = customerIndividual['LastName']
     MiddleName              = customerIndividual['MiddleName']
@@ -584,23 +549,119 @@ def CreateNewCustomerIndividual(request):
     AddressLine2            = customerIndividual['AddressLine2']
     CountryRegionName       = customerIndividual['CountryRegionName']
     
-    # Create new special offer object
+    # Create new customer individual object
     individual = CustomerIndividual(FirstName=FirstName, LastName=LastName, MiddleName=MiddleName, Title=Title, EmailAddress=EmailAddress, PhoneNumber=PhoneNumber, City=City, AddressLine1=AddressLine1, AddressLine2=AddressLine2, CountryRegionName=CountryRegionName)
         
-    # Save new special offer object
+    # Save new customer individual object
     individual.save()
+    
+    # Return customer individual ID
+    return individual.id
+    
 
 def DeleteCustomerIndividualWithID(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerIndividual = ast.literal_eval(dict)
     
-    # Get special offer id from dict
+    # Get customer individual id from dict
     IndividualID   = customerIndividual['IndividualID']
     
-    # Get special offer object
+    # Get customer individual object
     individual     = CustomerIndividual.objects.get(id=IndividualID)
     
-    # Delete special offer object
+    # Delete customer individual object
     individual.delete()
     
+def CreateNewCustomer(request, storeID, individualID):
+    # Get customer store and customer individual
+    customerStore = CustomerStore.objects.get(id = storeID)
+    customerIndividual = CustomerIndividual.objects.get(id = individualID)
+    
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customerInfo = ast.literal_eval(dict)
+    user = request.user
+    territory = Territory.objects.get(id=customerInfo['territoryID'])
+    
+    # Create new Customer
+    newCustomer = Customer(CustomerStore=customerStore, CustomerIndividual=customerIndividual,Employee=user, Territory=territory)
+    
+    # Save new customer
+    newCustomer.save()
+    
+def SaveNewCustomer(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customerInfo = ast.literal_eval(dict)
+    
+    # Get customer id from request
+    CustomerID = customerInfo["CustomerID"]
+    customer = Customer.objects.get(id = CustomerID)
+    
+    # Edit customer store
+    customerStore = customer.CustomerStore
+    customerStoreInfo = customerInfo["CustomerStore"]
+    
+    # Change new customer
+    customerStore.Name                    = customerStoreInfo['Name']
+    customerStore.BusinessType            = customerStoreInfo['BusinessType']
+    customerStore.Specialty               = customerStoreInfo['Specialty']
+    customerStore.AnnualSales             = customerStoreInfo['AnnualSales']
+    customerStore.AnnualRevenue           = customerStoreInfo['AnnualRevenue']
+    customerStore.YearOpened              = customerStoreInfo['YearOpened']
+    customerStore.SquareFeet              = customerStoreInfo['SquareFeet']
+    customerStore.NumberOfEmployees       = customerStoreInfo['NumberOfEmployees']
+    customerStore.City                    = customerStoreInfo['City']
+    customerStore.AddressLine1            = customerStoreInfo['AddressLine1']
+    customerStore.AddressLine2            = customerStoreInfo['AddressLine2']
+    customerStore.CountryRegionName       = customerStoreInfo['CountryRegionName']
+    
+    # Save new customer store
+    customerStore.save()
+    
+    # Edit Customer individual
+    customerIndividual = customer.CustomerIndividual
+    customerIndividualInfo = customerInfo["CustomerIndividual"]
+    
+    # Change new customer individual
+    customerIndividual.FirstName               = customerIndividualInfo['FirstName']
+    customerIndividual.LastName                = customerIndividualInfo['LastName']
+    customerIndividual.MiddleName              = customerIndividualInfo['MiddleName']
+    customerIndividual.Title                   = customerIndividualInfo['Title']
+    customerIndividual.EmailAddress            = customerIndividualInfo['EmailAddress']
+    customerIndividual.PhoneNumber             = customerIndividualInfo['PhoneNumber']
+    customerIndividual.City                    = customerIndividualInfo['City']
+    customerIndividual.AddressLine1            = customerIndividualInfo['AddressLine1']
+    customerIndividual.AddressLine2            = customerIndividualInfo['AddressLine2']
+    customerIndividual.CountryRegionName       = customerIndividualInfo['CountryRegionName']
+    
+    # Save new customer individual
+    customerIndividual.save()
+    
+    # Change new territory
+    customer.Territory = Territory.objects.get(id=customerInfo['Territory'])
+    
+    # Save new customer to database
+    customer.save()
+    
+    # Return id for further processing
+    return customer.id
+
+
+def DeleteCustomerWithID(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customerInfo = ast.literal_eval(dict)
+    
+    # Get customer id from dict
+    CustomerID   = customerInfo['CustomerID']
+    
+    # Get customer object
+    customer     = Customer.objects.get(id=CustomerID)
+    
+    # Delete customer object
+    customer.delete()
+    
+def GetAllCustomer():
+    return Customer.objects.all()[:2]

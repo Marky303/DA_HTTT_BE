@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer       
 from sales.models import *
+from rest_framework import serializers
 
 # Normal serializers___________________________________________________
 # Special offer serializer
@@ -59,6 +60,13 @@ class CustomerIndividualInfoSerializer(ModelSerializer):
         model = CustomerIndividual
         fields = '__all__'
         
+class CustomerInfoSerializer(ModelSerializer):
+    CustomerStore = CustomerStoreInfoSerializer()
+    CustomerIndividual = CustomerIndividualInfoSerializer()
+    
+    class Meta:
+        model = Customer
+        fields = ("Employee", "Territory", "CustomerStore", "CustomerIndividual")
         
 # EXAMPLE SERIALIZER FOR TESTING
 # Note model for testing

@@ -42,4 +42,10 @@ urlpatterns = [
     path('createcustomerindividual/'          , views.CreateCustomerIndividual),
     path('editcustomerindividualinformation/' , views.EditCustomerIndividualInformation),
     path('deletecustomerindividual/'          , views.DeleteCustomerIndividual),
+    
+    # Customer related
+    path('getcustomerinformation/'  , views.GetCustomerInformation),
+    path('createcustomer/'          , views.CreateCustomer),
+    path('editcustomerinformation/' , views.EditCustomerInformation),
+    path('deletecustomer/'          , views.DeleteCustomer),
 ]
