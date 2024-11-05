@@ -499,211 +499,6 @@ def GetAllSalesOrder(request):
 
 
 # Customer related_______________________________________________________________
-# Get customer store information view
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def GetCustomerStoreInformation(request):
-    store = CustomerStore.objects.all()
-    serializer = CustomerStoreInfoSerializer(store, many=True)
-    return Response(serializer.data)
-
-
-
-# Edit customer store information view
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def EditCustomerStoreInformation(request):
-    try:
-        error = []
-
-        
-        # Verify if customer store exist
-        if not VerifyCustomerStoreExist(request):
-            raise Exception("Don't have a customer store")
-                
-        # Verify if customer store information is valid
-        # error = VerifyCustomerStoreInformation(request)
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        # If customer store information is valid, save new customer store information
-        SaveNewCustomerStore(request)
-        
-        # Response successful code
-        return ResponseSuccessful("Information edited successfully")
-        
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)    
-
-
-
-# Create new customer store
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def CreateCustomerStore(request):
-    try:
-        error = []
-    
-        # Verify if user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if customer store info is valid
-        # VerifyCustomerStoreInformation(request, error)
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        CreateNewCustomerStore(request)        
-        
-        # Response
-        return ResponseSuccessful("Created new customer store successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error) 
-    
-    
-    
-# Delete customer store
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def DeleteCustomerStore(request):
-    try:     
-        error = []
-        
-        # Verify is user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        
-        # Check if customer store exists
-        if not VerifyCustomerStoreExist(request):
-            raise Exception("Customer store does not exist")
-        
-        # Delete customer store
-        DeleteCustomerStoreWithID(request)
-        
-        # Response
-        return ResponseSuccessful("Deleted customer store successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)  
-
-
-
-# Get customer individual information view
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def GetCustomerIndividualInformation(request):
-    individual = CustomerIndividual.objects.all()
-    serializer = CustomerIndividualInfoSerializer(individual, many=True)
-    return Response(serializer.data)
-
-
-
-# Edit customer individual information view
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def EditCustomerIndividualInformation(request):
-    try:
-        error = []
-        
-        # Verify is user is an employee
-        if not VerifyCustomerIndividualExist(request):
-            raise Exception("Don't have a customer individual")
-                
-        # Verify if customer individual information is valid
-        # error = VerifyCustomerIndividualInformation(request)
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        # If customer individual information is valid, save new customer individual information
-        SaveNewCustomerIndividual(request)
-        
-        # Response successful code
-        return ResponseSuccessful("Information edited successfully")
-        
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)
-
-
-
-# Create new customer individual
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def CreateCustomerIndividual(request):
-    try:
-        error = []
-    
-        # Verify if user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if customer individual info is valid
-        # VerifyCustomerIndividualInformation(request, error)
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        # save customer individual id
-        customerID = CreateNewCustomerIndividual(request)        
-        
-        # Response
-        return ResponseSuccessful("Created customer individual successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)
-    
-    
-    
-# Delete customer individual
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def DeleteCustomerIndividual(request):
-    try:     
-        error = []
-        
-        # Verify is user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if customer individual exists
-        if not VerifyCustomerIndividualExist(request):
-            raise Exception("Customer individual does not exist")
-        
-        # Delete customer individual
-        DeleteCustomerIndividualWithID(request)
-        
-        # Response
-        return ResponseSuccessful("Deleted customer individual successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)
-    
 # Get all customer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -730,6 +525,8 @@ def GetCustomerInformation(request):
             error.append(str(e))
         return ResponseError(error)
     
+    
+    
 # Create Customer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -748,16 +545,18 @@ def CreateCustomer(request):
         if error:
             raise Exception()
         
-        print(request.user)
+        # Check if store or customer is available
+        # Converting request.body to dictionary type
+        dict = request.body.decode("UTF-8")
+        info = ast.literal_eval(dict)
+        
+        if not ("CustomerStore" in info or "CustomerIndividual" in info):
+            return ResponseError("Bruhhhh")
+        
         # Edit customer
         storeID = CreateNewCustomerStore(request)
         individualID = CreateNewCustomerIndividual(request)
         CreateNewCustomer(request, storeID, individualID)    
-        
-        # # CRUD
-        # customerID = SaveNewCustomer(request)
-        # DeleteAllSalesOrderDetail(headerID)
-        # CreateNewSalesOrderDetail(request, headerID)    
         
         # Response
         return ResponseSuccessful("Created new customer successfully")
@@ -767,6 +566,8 @@ def CreateCustomer(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error)
+    
+    
     
 # Edit employee information view
 @api_view(['POST'])
@@ -797,6 +598,7 @@ def EditCustomerInformation(request):
         if str(e):
             error.append(str(e))
         return ResponseError(error)
+
 
 
 # Delete Customer

@@ -30,19 +30,7 @@ urlpatterns = [
     path('deletesalesorder/'            , views.DeleteSalesOrder),
     path('editsalesorder/'              , views.EditSalesOrder),
     path('getsalesorderinformation/'    , views.GetAllSalesOrder),
-    
-    # Customer store related
-    path('getcustomerstoreinformation/'  , views.GetCustomerStoreInformation),
-    path('createcustomerstore/'          , views.CreateCustomerStore),
-    path('editcustomerstoreinformation/' , views.EditCustomerStoreInformation),
-    path('deletecustomerstore/'          , views.DeleteCustomerStore),
-    
-    # Customer individual related
-    path('getcustomerindividualinformation/'  , views.GetCustomerIndividualInformation),
-    path('createcustomerindividual/'          , views.CreateCustomerIndividual),
-    path('editcustomerindividualinformation/' , views.EditCustomerIndividualInformation),
-    path('deletecustomerindividual/'          , views.DeleteCustomerIndividual),
-    
+        
     # Customer related
     path('getcustomerinformation/'  , views.GetCustomerInformation),
     path('createcustomer/'          , views.CreateCustomer),
