@@ -5,7 +5,7 @@ Backend đỉnh cao top 1 thế giới hơn Faker 1 xíu
 
 ## 2.Cách clone backend (IMPORTANT)
 ### Bước 1: Clone repo của backend về
-- Mở CMD và CD vào folder cần clone backend\
+- Mở CMD và CD vào folder cần clone backend
 
 ![clone](https://media.discordapp.net/attachments/556788092023865355/1303642925732986880/createvenv.png?ex=672c7f96&is=672b2e16&hm=8affcacf1fa0278a346e172eb031221a1bdf26455c35064a6e4a11a1c72d73b7&=&format=webp&quality=lossless&width=1441&height=343)\
 
