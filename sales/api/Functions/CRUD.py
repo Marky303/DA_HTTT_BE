@@ -5,6 +5,9 @@ import string
 from decimal import Decimal
 import math
 
+# Import ETL functions
+from analysis.api.Functions.CRUD import *
+
 # Import models
 from sales.models import *
 
@@ -19,7 +22,7 @@ def getPageIndex(pageNumber, pageSize):
 
 # Special offer related_______________________________________________________________
 # Get special offer list
-def GetAllSpecialOffer(request):
+def GetAllSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     specialOfferInfo = ast.literal_eval(dict)
@@ -44,7 +47,7 @@ def GetAllSpecialOffer(request):
 
 
 # Save edited special offer info
-def SaveNewSpecialOfferInformation(request):
+def EditSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     specialOfferInfo = ast.literal_eval(dict)
@@ -74,10 +77,13 @@ def SaveNewSpecialOfferInformation(request):
     # Save info
     specialOffer.save()
     
+    # ETL
+    
+    
     
     
 # Create new special offer
-def CreateNewSpecialOffer(request):
+def CreateSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     specialOfferInfo = ast.literal_eval(dict)
@@ -102,11 +108,13 @@ def CreateNewSpecialOffer(request):
     
     # Save new special offer object
     specialOffer.save()
-
+    
+    # ETL
+    CreateSpecialOfferDimETL(specialOffer)
 
 
 # Delete special offer with ID from request
-def DeleteSpecialOfferWithID(request):
+def DeleteSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     specialOfferInfo = ast.literal_eval(dict)
@@ -124,7 +132,7 @@ def DeleteSpecialOfferWithID(request):
     
 # Special offer - product related_____________________________________________________
 # Create new special offer - product relation
-def CreateNewSpecialOfferProduct(request):
+def CreateSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     info = ast.literal_eval(dict)
@@ -146,7 +154,7 @@ def CreateNewSpecialOfferProduct(request):
     
     
 # Delete special offer product relation
-def DeleteSpecialOfferProductWithID(request):
+def DeleteSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     info = ast.literal_eval(dict)
@@ -168,7 +176,7 @@ def DeleteSpecialOfferProductWithID(request):
     
 
 # Get special offer - product relation list
-def GetAllSpecialOfferProduct(request):
+def GetSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     info = ast.literal_eval(dict)
@@ -182,7 +190,7 @@ def GetAllSpecialOfferProduct(request):
 
 # Territory related___________________________________________________________________
 # Get territory list
-def GetAllTerritory(request):
+def GetTerritoryCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     territoryInfo = ast.literal_eval(dict)
@@ -233,7 +241,7 @@ def GetAllProduct(request):
 
 
 # Save edited product info
-def SaveNewProduct(request):
+def EditProductCRUD(request):
     # Converting request.body to dictionary type
     dict        = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
@@ -273,7 +281,7 @@ def SaveNewProduct(request):
     
     
 # Create new product
-def CreateNewProduct(request):
+def CreateProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
@@ -299,7 +307,7 @@ def CreateNewProduct(request):
 
 
 # Delete product with ID from database
-def DeleteProductWithID(request):
+def DeleteProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     productInfo = ast.literal_eval(dict)
@@ -326,7 +334,7 @@ def CreateCarrierTrackingNumber():
 
 
 # Create sales order details
-def CreateNewSalesOrderDetail(request, headerID):
+def CreateSalesOrderDetailCRUD(request, headerID):
     # Get Sales order header object
     salesOrderHeader = SalesOrderHeader.objects.get(id=headerID)
     
@@ -419,7 +427,7 @@ def CreateNewSalesOrderDetail(request, headerID):
         
 
 # Create sales order header
-def CreateNewSalesOrderHeader(request):
+def CreateSalesOrderHeaderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     salesOrderInfo = ast.literal_eval(dict)
@@ -457,7 +465,7 @@ def CreateNewSalesOrderHeader(request):
     
 
 # Edit sales order  
-def SaveNewSalesOrderHeader(request):
+def EditSalesOrderHeaderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     salesOrderInfo = ast.literal_eval(dict)
@@ -499,7 +507,7 @@ def SaveNewSalesOrderHeader(request):
 
 
 # Delete all sales order detail from a sales order header
-def DeleteAllSalesOrderDetail(headerID):
+def DeleteAllSalesOrderDetailCRUD(headerID):
     # Get sales order header object
     salesOrderHeader        = SalesOrderHeader.objects.get(id=headerID)
     
@@ -512,7 +520,7 @@ def DeleteAllSalesOrderDetail(headerID):
     
 
 # Delete sales order
-def DeleteSalesOrderWithIDreq(request):
+def DeleteSalesOrderWithRequestCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     salesOrder = ast.literal_eval(dict)
@@ -535,7 +543,7 @@ def DeleteSalesOrderWithID(salesOrderHeaderID:int):
     salesOrder.delete()
     
 
-def GetSalesOrder(request):
+def GetSalesOrderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerInfo = ast.literal_eval(dict)
@@ -560,7 +568,7 @@ def GetSalesOrder(request):
     
 
 # Customer related____________________________________________________________________
-def CreateNewCustomerStore(request):
+def CreateCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     info = ast.literal_eval(dict)
@@ -656,7 +664,7 @@ def CreateNewCustomer(request, storeID, individualID):
     
 
 
-def SaveNewCustomer(request):
+def EditCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerInfo = ast.literal_eval(dict)
@@ -769,7 +777,7 @@ def SaveNewCustomer(request):
 
 
 
-def DeleteCustomerWithID(request):
+def DeleteCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerInfo = ast.literal_eval(dict)
@@ -791,7 +799,7 @@ def DeleteCustomerWithID(request):
     
 
 
-def GetAllCustomer(request):
+def GetCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     customerInfo = ast.literal_eval(dict)

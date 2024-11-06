@@ -30,7 +30,7 @@ def GetSpecialOffer(request):
             raise Exception()
         
         # Get special offer list
-        response = GetAllSpecialOffer(request)
+        response = GetAllSpecialOfferCRUD(request)
         
         # Create serializer for special offer
         serializer = SpecialOfferSerializer(response["content"], many=True)  
@@ -65,7 +65,7 @@ def CreateSpecialOffer(request):
             raise Exception()
         
         # Edit special offer
-        CreateNewSpecialOffer(request)
+        CreateSpecialOfferCRUD(request)
         
         # Response
         return ResponseSuccessful("Created new special offer")
@@ -101,7 +101,7 @@ def EditSpecialOffer(request):
             raise Exception()
         
         # Edit special offer in database
-        SaveNewSpecialOfferInformation(request)        
+        EditSpecialOfferCRUD(request)        
         
         # Response
         return ResponseSuccessful("Information edited successfully")
@@ -134,7 +134,7 @@ def DeleteSpecialOffer(request):
             raise Exception()
         
         # Delete special offer
-        DeleteSpecialOfferWithID(request)
+        DeleteSpecialOfferCRUD(request)
         
         # Response
         return ResponseSuccessful("Deleted special offer")
@@ -150,7 +150,7 @@ def DeleteSpecialOffer(request):
 # Product related________________________________________________________________
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def GetProductInformation(request):
+def GetProduct(request):
     try:
         error = []
     
@@ -182,7 +182,7 @@ def GetProductInformation(request):
 # Edit product information
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def EditProductInformation(request):
+def EditProduct(request):
     try:
         error = []
         
@@ -198,7 +198,7 @@ def EditProductInformation(request):
             raise Exception()
         
         # If product information is valid, save new product information
-        SaveNewProduct(request)
+        EditProductCRUD(request)
         
         # Response successful code
         return ResponseSuccessful("Information edited successfully")
@@ -229,7 +229,7 @@ def CreateProduct(request):
         if error:
             raise Exception()
                 
-        CreateNewProduct(request)        
+        CreateProductCRUD(request)        
         
         # Response
         return ResponseSuccessful("Created new product successfully")
@@ -262,7 +262,7 @@ def DeleteProduct(request):
             raise Exception()
         
         # Delete product from database
-        DeleteProductWithID(request)
+        DeleteProductCRUD(request)
         
         # Response
         return ResponseSuccessful("Deleted product successfully")
@@ -304,7 +304,7 @@ def CreateSpecialOfferProduct(request):
             raise Exception()
         
         # Create new special offer - product
-        CreateNewSpecialOfferProduct(request)        
+        CreateSpecialOfferProductCRUD(request)        
         
         # Response
         return ResponseSuccessful("Added a new special offer for this product")
@@ -320,7 +320,7 @@ def CreateSpecialOfferProduct(request):
 # Get all special offer product
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def GetSpecialOfferProduct(request):
+def GetAllSpecialOfferProduct(request):
     try:
         error = []
     
@@ -329,7 +329,7 @@ def GetSpecialOfferProduct(request):
             raise Exception("You are not an employee")
         
         # Get special offer list
-        specialOfferProductList = GetAllSpecialOfferProduct(request)
+        specialOfferProductList = GetSpecialOfferProductCRUD(request)
         
         # Create serializer
         serializer = SpecialOfferProductSerializer(specialOfferProductList, many=True)  
@@ -364,7 +364,7 @@ def DeleteSpecialOfferProduct(request):
             raise Exception()
         
         # Edit special offer
-        DeleteSpecialOfferProductWithID(request)        
+        DeleteSpecialOfferProductCRUD(request)        
         
         # Response
         return ResponseSuccessful("Deleted special offer - product")
@@ -394,7 +394,7 @@ def GetTerritory(request):
             raise Exception()
         
         # Get special offer list
-        response = GetAllTerritory(request)
+        response = GetTerritoryCRUD(request)
         
         # Create serializer for special offer
         serializer = TerritorySerializer(response["content"], many=True)  
@@ -431,8 +431,8 @@ def CreateSalesOrder(request):
         
         # CRUD
         headerID = None
-        headerID = CreateNewSalesOrderHeader(request)
-        CreateNewSalesOrderDetail(request, headerID)
+        headerID = CreateSalesOrderHeaderCRUD(request)
+        CreateSalesOrderDetailCRUD(request, headerID)
         
         # Response
         return ResponseSuccessful("Created new salesorder")
@@ -468,9 +468,9 @@ def EditSalesOrder(request):
             raise Exception()
         
         # CRUD
-        headerID = SaveNewSalesOrderHeader(request)
-        DeleteAllSalesOrderDetail(headerID)
-        CreateNewSalesOrderDetail(request, headerID)
+        headerID = EditSalesOrderHeaderCRUD(request)
+        DeleteAllSalesOrderDetailCRUD(headerID)
+        CreateSalesOrderDetailCRUD(request, headerID)
         
         # Response
         return ResponseSuccessful("Edited salesorder info")
@@ -503,7 +503,7 @@ def DeleteSalesOrder(request):
             raise Exception()
         
         # Edit sales order
-        DeleteSalesOrderWithIDreq(request)        
+        DeleteSalesOrderWithRequestCRUD(request)        
         
         # Response
         return ResponseSuccessful("Deleted sales order")
@@ -519,7 +519,7 @@ def DeleteSalesOrder(request):
 # Get all salesorder
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def GetAllSalesOrder(request):
+def GetSalesOrder(request):
     try:
         error = []
     
@@ -532,7 +532,7 @@ def GetAllSalesOrder(request):
             raise Exception()
         
         # Get all sales order
-        response =  GetSalesOrder(request)
+        response =  GetSalesOrderCRUD(request)
         
         # Create serializer for special offer
         serializer = SalesOrderHeaderSerializer(response["content"], many=True)  
@@ -551,7 +551,7 @@ def GetAllSalesOrder(request):
 # Get all customer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def GetCustomerInformation(request):
+def GetCustomer(request):
     try:
         error = []
     
@@ -560,7 +560,7 @@ def GetCustomerInformation(request):
             raise Exception("You are not an employee")
         
         # Get customer list
-        response = GetAllCustomer(request)
+        response = GetCustomerCRUD(request)
         
         # Create serializer for special offer
         serializer = CustomerInfoSerializer(response["content"], many=True)  
@@ -603,7 +603,7 @@ def CreateCustomer(request):
             return ResponseError("Bruhhhh")
         
         # Edit customer
-        storeID = CreateNewCustomerStore(request)
+        storeID = CreateCustomerCRUD(request)
         individualID = CreateNewCustomerIndividual(request)
         CreateNewCustomer(request, storeID, individualID)    
         
@@ -621,7 +621,7 @@ def CreateCustomer(request):
 # Edit employee information view
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def EditCustomerInformation(request):
+def EditCustomer(request):
     try:
         error = []
         
@@ -634,7 +634,7 @@ def EditCustomerInformation(request):
             raise Exception()
         
         # If customer information is valid, save new customer information
-        SaveNewCustomer(request)
+        EditCustomerCRUD(request)
         
         # Response successful code
         return ResponseSuccessful("Information edited successfully")
@@ -663,7 +663,7 @@ def DeleteCustomer(request):
             raise Exception("Customer does not exist")
         
         # Delete customer
-        DeleteCustomerWithID(request)
+        DeleteCustomerCRUD(request)
         
         # Response
         return ResponseSuccessful("Deleted customer successfully")

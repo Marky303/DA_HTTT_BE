@@ -14,26 +14,26 @@ urlpatterns = [
     # Special offer product related
     path('createspecialofferproduct/'   , views.CreateSpecialOfferProduct),
     path('deletespecialofferproduct/'   , views.DeleteSpecialOfferProduct),
-    path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
+    path('getallspecialofferproduct/'   , views.GetAllSpecialOfferProduct),
     
     # Territory related
     path('getterritory/'                , views.GetTerritory),
     
     # Product related
-    path('getproduct/'                  , views.GetProductInformation),
+    path('getproduct/'                  , views.GetProduct),
     path('createproduct/'               , views.CreateProduct),
-    path('editproduct/'                 , views.EditProductInformation),
+    path('editproduct/'                 , views.EditProduct),
     path('deleteproduct/'               , views.DeleteProduct),
     
     # Salesorder related
     path('createsalesorder/'            , views.CreateSalesOrder),
     path('deletesalesorder/'            , views.DeleteSalesOrder),
     path('editsalesorder/'              , views.EditSalesOrder),
-    path('getsalesorder/'               , views.GetAllSalesOrder),
+    path('getsalesorder/'               , views.GetSalesOrder),
         
     # Customer related
-    path('getcustomerinformation/'      , views.GetCustomerInformation),
+    path('getcustomer/'                 , views.GetCustomer),
     path('createcustomer/'              , views.CreateCustomer),
-    path('editcustomerinformation/'     , views.EditCustomerInformation),
+    path('editcustomer/'                , views.EditCustomer),
     path('deletecustomer/'              , views.DeleteCustomer),
 ]
