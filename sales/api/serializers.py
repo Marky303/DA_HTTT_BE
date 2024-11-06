@@ -10,9 +10,11 @@ class SpecialOfferSerializer(ModelSerializer):
         
 # Special offer - product serializer
 class SpecialOfferProductSerializer(ModelSerializer):
+    SpecialOffer = SpecialOfferSerializer()
+    
     class Meta:
         model = SpecialOfferProduct
-        fields = '__all__'
+        fields = ("id", "SpecialOffer")
         
 # Territory serializer
 class TerritorySerializer(ModelSerializer):
@@ -20,6 +22,7 @@ class TerritorySerializer(ModelSerializer):
         model = Territory
         fields = '__all__'
 
+# Product serializer
 class ProductSerializer(ModelSerializer):    
     class Meta:
         model = Product
@@ -45,3 +48,24 @@ class SalesOrderHeaderSerializer(ModelSerializer):
     class Meta:
         model = SalesOrderHeader
         fields = '__all__'
+
+
+
+# Customer related serializer__________________________________________
+class CustomerStoreInfoSerializer(ModelSerializer):
+    class Meta:
+        model = CustomerStore
+        fields = '__all__'
+        
+class CustomerIndividualInfoSerializer(ModelSerializer):
+    class Meta:
+        model = CustomerIndividual
+        fields = '__all__'
+        
+class CustomerInfoSerializer(ModelSerializer):
+    CustomerStore = CustomerStoreInfoSerializer()
+    CustomerIndividual = CustomerIndividualInfoSerializer()
+    
+    class Meta:
+        model = Customer
+        fields = ("id", "Employee", "Territory", "CustomerStore", "CustomerIndividual")

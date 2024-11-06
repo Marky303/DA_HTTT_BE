@@ -117,5 +117,15 @@ def VerifySalesOrderExist(request):
 
 
 # Customer related_____________________________________________________________________
+def VerifyCustomerExist(request):    
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customer = ast.literal_eval(dict)
+    
+    # Get special offer id
+    CustomerID = customer['CustomerID']
+    
+    # Check if id exist
+    exists = Customer.objects.filter(id=CustomerID).exists()
 
-
+    return exists

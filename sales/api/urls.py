@@ -6,7 +6,7 @@ from . import views
 # Setting up urls patterns
 urlpatterns = [
     # Special offer related
-    path('getallspecialoffer/'         , views.GetSpecialOffer),            
+    path('getspecialoffer/'             , views.GetSpecialOffer),            
     path('editspecialoffer/'            , views.EditSpecialOffer),
     path('createspecialoffer/'          , views.CreateSpecialOffer),
     path('deletespecialoffer/'          , views.DeleteSpecialOffer),
@@ -17,20 +17,23 @@ urlpatterns = [
     path('getallspecialofferproduct/'   , views.GetSpecialOfferProduct),
     
     # Territory related
-    path('getallterritory/'             , views.GetTerritory),
+    path('getterritory/'                , views.GetTerritory),
     
     # Product related
-    path('getproductinformation/'       , views.GetProductInformation),
-    path('createnewproduct/'            , views.CreateProduct),
-    path('editproductinformation/'      , views.EditProductInformation),
+    path('getproduct/'                  , views.GetProductInformation),
+    path('createproduct/'               , views.CreateProduct),
+    path('editproduct/'                 , views.EditProductInformation),
     path('deleteproduct/'               , views.DeleteProduct),
     
     # Salesorder related
     path('createsalesorder/'            , views.CreateSalesOrder),
     path('deletesalesorder/'            , views.DeleteSalesOrder),
     path('editsalesorder/'              , views.EditSalesOrder),
-    path('getsalesorderinformation/'    , views.GetAllSalesOrder),
-    
-    # Customer store related
-
+    path('getsalesorder/'               , views.GetAllSalesOrder),
+        
+    # Customer related
+    path('getcustomerinformation/'      , views.GetCustomerInformation),
+    path('createcustomer/'              , views.CreateCustomer),
+    path('editcustomerinformation/'     , views.EditCustomerInformation),
+    path('deletecustomer/'              , views.DeleteCustomer),
 ]
