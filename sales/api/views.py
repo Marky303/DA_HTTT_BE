@@ -15,7 +15,7 @@ from sales.api.serializers import *
 
 # Special offer related__________________________________________________________
 # Get Special Offer
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetSpecialOffer(request):
     try:
@@ -30,13 +30,13 @@ def GetSpecialOffer(request):
             raise Exception()
         
         # Get special offer list
-        specialOfferList = GetAllSpecialOffer()
+        response = GetAllSpecialOffer(request)
         
         # Create serializer for special offer
-        serializer = SpecialOfferSerializer(specialOfferList, many=True)  
+        serializer = SpecialOfferSerializer(response["content"], many=True)  
         
         # Response
-        return Response(serializer.data)
+        return ResponseList(serializer.data, response["totalPage"])
           
     except Exception as e:
         # Response a error code and error content
@@ -148,12 +148,34 @@ def DeleteSpecialOffer(request):
 
 
 # Product related________________________________________________________________
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
-    product = Product.objects.all()
-    serializer = ProductSerializer(product, many=True)
-    return Response(serializer.data)
+    try:
+        error = []
+    
+        # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get special offer list
+        response = GetAllProduct(request)
+        
+        # Create serializer for special offer
+        serializer = ProductSerializer(response["content"], many=True)  
+        
+        # Response
+        return ResponseList(serializer.data, response["totalPage"])
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
 
 
 
@@ -275,7 +297,7 @@ def CreateSpecialOfferProduct(request):
         
         # Check if special offer product already existed for adding
         if VerifySpecialOfferProductExist(request):
-            raise Exception("SepcialOffer - Product already existed!")
+            raise Exception("Special offer already applied on this product")
         
         # Check if there is an error
         if error:
@@ -285,7 +307,7 @@ def CreateSpecialOfferProduct(request):
         CreateNewSpecialOfferProduct(request)        
         
         # Response
-        return ResponseSuccessful("Created new special offer - product")
+        return ResponseSuccessful("Added a new special offer for this product")
           
     except Exception as e:
         # Response a error code and error content
@@ -296,7 +318,7 @@ def CreateSpecialOfferProduct(request):
     
     
 # Get all special offer product
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetSpecialOfferProduct(request):
     try:
@@ -307,13 +329,13 @@ def GetSpecialOfferProduct(request):
             raise Exception("You are not an employee")
         
         # Get special offer list
-        specialOfferProductList = GetAllSpecialOfferProduct()
+        specialOfferProductList = GetAllSpecialOfferProduct(request)
         
         # Create serializer
         serializer = SpecialOfferProductSerializer(specialOfferProductList, many=True)  
         
         # Response
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
           
     except Exception as e:
         # Response a error code and error content
@@ -357,12 +379,34 @@ def DeleteSpecialOfferProduct(request):
 
 # Territory related______________________________________________________________
 # Get all territory view
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetTerritory(request):
-    territoryList = GetAllTerritory()
-    serializer = TerritorySerializer(territoryList, many=True)  
-    return Response(serializer.data)
+    try:
+        error = []
+    
+        # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get special offer list
+        response = GetAllTerritory(request)
+        
+        # Create serializer for special offer
+        serializer = TerritorySerializer(response["content"], many=True)  
+        
+        # Response
+        return ResponseList(serializer.data, response["totalPage"])
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
 
 
 
@@ -386,6 +430,7 @@ def CreateSalesOrder(request):
             raise Exception()
         
         # CRUD
+        headerID = None
         headerID = CreateNewSalesOrderHeader(request)
         CreateNewSalesOrderDetail(request, headerID)
         
@@ -393,6 +438,10 @@ def CreateSalesOrder(request):
         return ResponseSuccessful("Created new salesorder")
           
     except Exception as e:
+        # Revert created header
+        if headerID:
+            DeleteSalesOrderWithID(headerID)
+        
         # Response a error code and error content
         if str(e):
             error.append(str(e))
@@ -454,7 +503,7 @@ def DeleteSalesOrder(request):
             raise Exception()
         
         # Edit sales order
-        DeleteSalesOrderWithID(request)        
+        DeleteSalesOrderWithIDreq(request)        
         
         # Response
         return ResponseSuccessful("Deleted sales order")
@@ -468,7 +517,7 @@ def DeleteSalesOrder(request):
 
 
 # Get all salesorder
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetAllSalesOrder(request):
     try:
@@ -483,13 +532,13 @@ def GetAllSalesOrder(request):
             raise Exception()
         
         # Get all sales order
-        salesOrderList =  SalesOrderHeader.objects.all()
+        response =  GetSalesOrder(request)
         
         # Create serializer for special offer
-        serializer = SalesOrderHeaderSerializer(salesOrderList, many=True)  
+        serializer = SalesOrderHeaderSerializer(response["content"], many=True)  
         
         # Response
-        return Response(serializer.data)
+        return ResponseList(serializer.data, response["totalPage"])
     except Exception as e:
         # Response a error code and error content
         if str(e):
@@ -500,7 +549,7 @@ def GetAllSalesOrder(request):
 
 # Customer related_______________________________________________________________
 # Get all customer
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetCustomerInformation(request):
     try:
@@ -511,13 +560,13 @@ def GetCustomerInformation(request):
             raise Exception("You are not an employee")
         
         # Get customer list
-        customerList = GetAllCustomer()
+        response = GetAllCustomer(request)
         
-        # Create serializer
-        serializer = CustomerInfoSerializer(customerList, many=True)  
+        # Create serializer for special offer
+        serializer = CustomerInfoSerializer(response["content"], many=True)  
         
         # Response
-        return Response(serializer.data)
+        return ResponseList(serializer.data, response["totalPage"])
           
     except Exception as e:
         # Response a error code and error content
@@ -579,9 +628,6 @@ def EditCustomerInformation(request):
         # Verify is user is an employee
         if not VerifyCustomerExist(request):
             raise Exception("Don't have a customer")
-                
-        # Verify if customer information is valid
-        # error = VerifyCustomerIndividualInformation(request)
         
         # Check if there is an error
         if error:

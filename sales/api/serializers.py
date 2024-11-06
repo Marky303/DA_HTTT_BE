@@ -1,6 +1,5 @@
 from rest_framework.serializers import ModelSerializer       
 from sales.models import *
-from rest_framework import serializers
 
 # Normal serializers___________________________________________________
 # Special offer serializer
@@ -11,9 +10,11 @@ class SpecialOfferSerializer(ModelSerializer):
         
 # Special offer - product serializer
 class SpecialOfferProductSerializer(ModelSerializer):
+    SpecialOffer = SpecialOfferSerializer()
+    
     class Meta:
         model = SpecialOfferProduct
-        fields = '__all__'
+        fields = ("id", "SpecialOffer")
         
 # Territory serializer
 class TerritorySerializer(ModelSerializer):
@@ -21,6 +22,7 @@ class TerritorySerializer(ModelSerializer):
         model = Territory
         fields = '__all__'
 
+# Product serializer
 class ProductSerializer(ModelSerializer):    
     class Meta:
         model = Product
@@ -66,4 +68,4 @@ class CustomerInfoSerializer(ModelSerializer):
     
     class Meta:
         model = Customer
-        fields = ("Employee", "Territory", "CustomerStore", "CustomerIndividual")
+        fields = ("id", "Employee", "Territory", "CustomerStore", "CustomerIndividual")

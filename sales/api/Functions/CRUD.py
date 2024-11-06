@@ -3,15 +3,43 @@ from datetime import datetime
 import random
 import string
 from decimal import Decimal
+import math
 
 # Import models
 from sales.models import *
 
+# Get page index function
+DEFAULT_PAGE_SIZE = 10
+
+def getPageIndex(pageNumber, pageSize):
+    startIndex = (pageNumber - 1) * pageSize
+    endIndex   = startIndex + pageSize
+    return (startIndex, endIndex)
+
 
 # Special offer related_______________________________________________________________
 # Get special offer list
-def GetAllSpecialOffer():
-    return SpecialOffer.objects.all()
+def GetAllSpecialOffer(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    specialOfferInfo = ast.literal_eval(dict)
+    
+    # Get the page number
+    page = specialOfferInfo["page"]
+    pageIndexTuple = getPageIndex(page, DEFAULT_PAGE_SIZE)
+
+    # Get the list
+    lst = sorted(SpecialOffer.objects.all(), key=lambda obj: obj.id, reverse=True)
+
+    # Get the total number of pages
+    total_pages = math.ceil(len(lst) / DEFAULT_PAGE_SIZE)
+
+    responseDict = {
+        "content": lst[pageIndexTuple[0]:pageIndexTuple[1]],
+        "totalPage": total_pages
+    }
+
+    return responseDict
 
 
 
@@ -140,22 +168,67 @@ def DeleteSpecialOfferProductWithID(request):
     
 
 # Get special offer - product relation list
-def GetAllSpecialOfferProduct():
-    return SpecialOfferProduct.objects.all()
+def GetAllSpecialOfferProduct(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    info = ast.literal_eval(dict)
+    
+    # Get product
+    product = Product.objects.get(id=info['productID'])
+    
+    return SpecialOfferProduct.objects.filter(Product=product)
 
 
 
 # Territory related___________________________________________________________________
 # Get territory list
-def GetAllTerritory():
-    return Territory.objects.all()
+def GetAllTerritory(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    territoryInfo = ast.literal_eval(dict)
+    
+    # Get the page number
+    page = territoryInfo["page"]
+    pageIndexTuple = getPageIndex(page, DEFAULT_PAGE_SIZE)
+
+    # Get the list
+    lst = sorted(Territory.objects.all(), key=lambda obj: obj.id, reverse=True)
+
+    # Get the total number of pages
+    total_pages = math.ceil(len(lst) / DEFAULT_PAGE_SIZE)
+
+    responseDict = {
+        "content": lst[pageIndexTuple[0]:pageIndexTuple[1]],
+        "totalPage": total_pages
+    }
+
+    return responseDict
 
 
 
 # Product related_____________________________________________________________________
 # Get product list
-def GetAllProduct():
-    return Product.objects.all()
+def GetAllProduct(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    productInfo = ast.literal_eval(dict)
+    
+    # Get the page number
+    page = productInfo["page"]
+    pageIndexTuple = getPageIndex(page, DEFAULT_PAGE_SIZE)
+
+    # Get the list
+    lst = sorted(Product.objects.all(), key=lambda obj: obj.id, reverse=True)
+
+    # Get the total number of pages
+    total_pages = math.ceil(len(lst) / DEFAULT_PAGE_SIZE)
+
+    responseDict = {
+        "content": lst[pageIndexTuple[0]:pageIndexTuple[1]],
+        "totalPage": total_pages
+    }
+
+    return responseDict
 
 
 
@@ -265,6 +338,8 @@ def CreateNewSalesOrderDetail(request, headerID):
     # Calculate subTotal for SalesOrderHeader 
     subTotal = Decimal(0)
     
+    salesOrderDetailList = []
+    
     for salesOrderDetail in salesOrderDetails:
         # 0.Get SalesOrderDetail infos
         productID       = salesOrderDetail['productID']
@@ -286,12 +361,22 @@ def CreateNewSalesOrderDetail(request, headerID):
             
             # Check if current date is valid
             currentDate = datetime.now()
-            if not specialOffer.StartDate.replace(tzinfo=None) <= currentDate <= specialOffer.EndDate.replace(tzinfo=None):
-                continue
+            if specialOffer.EndDate:
+                if not specialOffer.StartDate.replace(tzinfo=None) <= currentDate <= specialOffer.EndDate.replace(tzinfo=None):
+                    continue
+            else:
+                if not specialOffer.StartDate.replace(tzinfo=None) <= currentDate:
+                    continue 
             
             # Check if quantity is valid
-            if not specialOffer.MinQty <= OrderQty <= specialOffer.MaxQty:
-                continue
+            if specialOffer.MaxQty:
+                if not specialOffer.MinQty <= int(OrderQty) <= specialOffer.MaxQty:
+                    continue
+            else:
+                if not specialOffer.MinQty <= int(OrderQty):
+                    continue
+            
+            print("Check")
             
             # Check highest rate
             if highestDiscount < specialOffer.DiscountPct:
@@ -314,16 +399,22 @@ def CreateNewSalesOrderDetail(request, headerID):
                                             Product=product,
                                             SalesOrder=salesOrderHeader)
         
-        # 6.Save SalesHeaderDetail
-        salesOrderDetail.save()
+        # 6.Append to list
+        salesOrderDetailList.append(salesOrderDetail)
         
         # 7.Add to SubTotal 
         subTotal += LineTotal
+        
+    # SAVE IF THERE IS NO ERROR
+    for item in salesOrderDetailList:
+        item.save()
                 
     # Update subTotal and other numbers of sales order
     salesOrderHeader.SubTotal = subTotal
     salesOrderHeader.TotalDue = subTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt
     salesOrderHeader.save()
+    
+    return True
                     
         
 
@@ -421,7 +512,7 @@ def DeleteAllSalesOrderDetail(headerID):
     
 
 # Delete sales order
-def DeleteSalesOrderWithID(request):
+def DeleteSalesOrderWithIDreq(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     salesOrder = ast.literal_eval(dict)
@@ -434,6 +525,37 @@ def DeleteSalesOrderWithID(request):
     
     # Delete sales order object
     salesOrder.delete()
+    
+    
+def DeleteSalesOrderWithID(salesOrderHeaderID:int):
+    # Get sales order object
+    salesOrder            = SalesOrderHeader.objects.get(id=salesOrderHeaderID)
+    
+    # Delete sales order object
+    salesOrder.delete()
+    
+
+def GetSalesOrder(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customerInfo = ast.literal_eval(dict)
+    
+    # Get the page number
+    page = customerInfo["page"]
+    pageIndexTuple = getPageIndex(page, DEFAULT_PAGE_SIZE)
+
+    # Get the list
+    lst = sorted(SalesOrderHeader.objects.all(), key=lambda obj: obj.id, reverse=True)
+
+    # Get the total number of pages
+    total_pages = math.ceil(len(lst) / DEFAULT_PAGE_SIZE)
+
+    responseDict = {
+        "content": lst[pageIndexTuple[0]:pageIndexTuple[1]],
+        "totalPage": total_pages
+    }
+
+    return responseDict
     
     
 
@@ -669,5 +791,24 @@ def DeleteCustomerWithID(request):
     
 
 
-def GetAllCustomer():
-    return Customer.objects.all()[:5]
+def GetAllCustomer(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    customerInfo = ast.literal_eval(dict)
+    
+    # Get the page number
+    page = customerInfo["page"]
+    pageIndexTuple = getPageIndex(page, DEFAULT_PAGE_SIZE)
+
+    # Get the list
+    lst = sorted(Customer.objects.all(), key=lambda obj: obj.id, reverse=True)
+
+    # Get the total number of pages
+    total_pages = math.ceil(len(lst) / DEFAULT_PAGE_SIZE)
+
+    responseDict = {
+        "content": lst[pageIndexTuple[0]:pageIndexTuple[1]],
+        "totalPage": total_pages
+    }
+
+    return responseDict
