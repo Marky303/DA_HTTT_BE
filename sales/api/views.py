@@ -15,7 +15,7 @@ from sales.api.serializers import *
 
 # Special offer related__________________________________________________________
 # Get Special Offer
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetSpecialOffer(request):
     try:
@@ -30,13 +30,13 @@ def GetSpecialOffer(request):
             raise Exception()
         
         # Get special offer list
-        specialOfferList = GetAllSpecialOffer()
+        response = GetAllSpecialOffer(request)
         
         # Create serializer for special offer
-        serializer = SpecialOfferSerializer(specialOfferList, many=True)  
+        serializer = SpecialOfferSerializer(response["content"], many=True)  
         
         # Response
-        return Response(serializer.data)
+        return ResponseList(serializer.data, response["totalPage"])
           
     except Exception as e:
         # Response a error code and error content
@@ -148,12 +148,34 @@ def DeleteSpecialOffer(request):
 
 
 # Product related________________________________________________________________
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetProductInformation(request):
-    product = Product.objects.all()
-    serializer = ProductSerializer(product, many=True)
-    return Response(serializer.data)
+    try:
+        error = []
+    
+        # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get special offer list
+        response = GetAllProduct(request)
+        
+        # Create serializer for special offer
+        serializer = ProductSerializer(response["content"], many=True)  
+        
+        # Response
+        return ResponseList(serializer.data, response["totalPage"])
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
 
 
 
@@ -275,7 +297,7 @@ def CreateSpecialOfferProduct(request):
         
         # Check if special offer product already existed for adding
         if VerifySpecialOfferProductExist(request):
-            raise Exception("SepcialOffer - Product already existed!")
+            raise Exception("Special offer already applied on this product")
         
         # Check if there is an error
         if error:
@@ -285,7 +307,7 @@ def CreateSpecialOfferProduct(request):
         CreateNewSpecialOfferProduct(request)        
         
         # Response
-        return ResponseSuccessful("Created new special offer - product")
+        return ResponseSuccessful("Added a new special offer for this product")
           
     except Exception as e:
         # Response a error code and error content
@@ -296,7 +318,7 @@ def CreateSpecialOfferProduct(request):
     
     
 # Get all special offer product
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetSpecialOfferProduct(request):
     try:
@@ -307,13 +329,13 @@ def GetSpecialOfferProduct(request):
             raise Exception("You are not an employee")
         
         # Get special offer list
-        specialOfferProductList = GetAllSpecialOfferProduct()
+        specialOfferProductList = GetAllSpecialOfferProduct(request)
         
         # Create serializer
         serializer = SpecialOfferProductSerializer(specialOfferProductList, many=True)  
         
         # Response
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
           
     except Exception as e:
         # Response a error code and error content
@@ -357,12 +379,34 @@ def DeleteSpecialOfferProduct(request):
 
 # Territory related______________________________________________________________
 # Get all territory view
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetTerritory(request):
-    territoryList = GetAllTerritory()
-    serializer = TerritorySerializer(territoryList, many=True)  
-    return Response(serializer.data)
+    try:
+        error = []
+    
+        # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Check if there is an error
+        if error:
+            raise Exception()
+        
+        # Get special offer list
+        response = GetAllTerritory(request)
+        
+        # Create serializer for special offer
+        serializer = TerritorySerializer(response["content"], many=True)  
+        
+        # Response
+        return ResponseList(serializer.data, response["totalPage"])
+          
+    except Exception as e:
+        # Response a error code and error content
+        if str(e):
+            error.append(str(e))
+        return ResponseError(error) 
 
 
 
@@ -386,6 +430,7 @@ def CreateSalesOrder(request):
             raise Exception()
         
         # CRUD
+        headerID = None
         headerID = CreateNewSalesOrderHeader(request)
         CreateNewSalesOrderDetail(request, headerID)
         
@@ -393,6 +438,10 @@ def CreateSalesOrder(request):
         return ResponseSuccessful("Created new salesorder")
           
     except Exception as e:
+        # Revert created header
+        if headerID:
+            DeleteSalesOrderWithID(headerID)
+        
         # Response a error code and error content
         if str(e):
             error.append(str(e))
@@ -454,7 +503,7 @@ def DeleteSalesOrder(request):
             raise Exception()
         
         # Edit sales order
-        DeleteSalesOrderWithID(request)        
+        DeleteSalesOrderWithIDreq(request)        
         
         # Response
         return ResponseSuccessful("Deleted sales order")
@@ -468,7 +517,7 @@ def DeleteSalesOrder(request):
 
 
 # Get all salesorder
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def GetAllSalesOrder(request):
     try:
@@ -483,13 +532,13 @@ def GetAllSalesOrder(request):
             raise Exception()
         
         # Get all sales order
-        salesOrderList =  SalesOrderHeader.objects.all()
+        response =  GetSalesOrder(request)
         
         # Create serializer for special offer
-        serializer = SalesOrderHeaderSerializer(salesOrderList, many=True)  
+        serializer = SalesOrderHeaderSerializer(response["content"], many=True)  
         
         # Response
-        return Response(serializer.data)
+        return ResponseList(serializer.data, response["totalPage"])
     except Exception as e:
         # Response a error code and error content
         if str(e):
@@ -499,52 +548,38 @@ def GetAllSalesOrder(request):
 
 
 # Customer related_______________________________________________________________
-# Get customer store information view
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def GetCustomerStoreInformation(request):
-    store = CustomerStore.objects.all()
-    serializer = CustomerStoreInfoSerializer(store, many=True)
-    return Response(serializer.data)
-
-
-
-# Edit employee information view
+# Get all customer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def EditCustomerStoreInformation(request):
+def GetCustomerInformation(request):
     try:
         error = []
-        
+    
         # Verify is user is an employee
-        if not VerifyCustomerStoreExist(request):
-            raise Exception("Don't have a customer store")
-                
-        # Verify if employee information is valid
-        # error = VerifyCustomerStoreInformation(request)
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
         
-        # Check if there is an error
-        if error:
-            raise Exception()
+        # Get customer list
+        response = GetAllCustomer(request)
         
-        # If employee information is valid, save new employee information
-        SaveNewCustomerStore(request)
+        # Create serializer for special offer
+        serializer = CustomerInfoSerializer(response["content"], many=True)  
         
-        # Response successful code
-        return ResponseSuccessful("Information edited successfully")
-        
+        # Response
+        return ResponseList(serializer.data, response["totalPage"])
+          
     except Exception as e:
         # Response a error code and error content
         if str(e):
             error.append(str(e))
-        return ResponseError(error)    
-
-
-
-# Create new Special Offer
+        return ResponseError(error)
+    
+    
+    
+# Create Customer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def CreateCustomerStore(request):
+def CreateCustomer(request):
     try:
         error = []
     
@@ -552,86 +587,54 @@ def CreateCustomerStore(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
-        # Check if special offer info is valid
-        # VerifyCustomerStoreInformation(request, error)
+        # Check if customer info is valid
+        # VerifyCustomerInformation(request, error)
         
         # Check if there is an error
         if error:
             raise Exception()
         
-        CreateNewCustomerStore(request)        
+        # Check if store or customer is available
+        # Converting request.body to dictionary type
+        dict = request.body.decode("UTF-8")
+        info = ast.literal_eval(dict)
+        
+        if not ("CustomerStore" in info or "CustomerIndividual" in info):
+            return ResponseError("Bruhhhh")
+        
+        # Edit customer
+        storeID = CreateNewCustomerStore(request)
+        individualID = CreateNewCustomerIndividual(request)
+        CreateNewCustomer(request, storeID, individualID)    
         
         # Response
-        return ResponseSuccessful("Created new customer store successfully")
+        return ResponseSuccessful("Created new customer successfully")
           
     except Exception as e:
         # Response a error code and error content
         if str(e):
             error.append(str(e))
-        return ResponseError(error) 
+        return ResponseError(error)
     
     
     
-# Delete Special Offer
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def DeleteCustomerStore(request):
-    try:     
-        error = []
-        
-        # Verify is user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        
-        # Check if customer store exists
-        if not VerifyCustomerStoreExist(request):
-            raise Exception("Customer store does not exist")
-        
-        # Delete special offer
-        DeleteCustomerStoreWithID(request)
-        
-        # Response
-        return ResponseSuccessful("Deleted customer store successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)  
-
-
-
-# Get customer individual information view
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def GetCustomerIndividualInformation(request):
-    individual = CustomerIndividual.objects.all()
-    serializer = CustomerIndividualInfoSerializer(individual, many=True)
-    return Response(serializer.data)
-
-
-
 # Edit employee information view
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def EditCustomerIndividualInformation(request):
+def EditCustomerInformation(request):
     try:
         error = []
         
         # Verify is user is an employee
-        if not VerifyCustomerIndividualExist(request):
-            raise Exception("Don't have a customer individual")
-                
-        # Verify if employee information is valid
-        # error = VerifyCustomerIndividualInformation(request)
+        if not VerifyCustomerExist(request):
+            raise Exception("Don't have a customer")
         
         # Check if there is an error
         if error:
             raise Exception()
         
-        # If employee information is valid, save new employee information
-        SaveNewCustomerIndividual(request)
+        # If customer information is valid, save new customer information
+        SaveNewCustomer(request)
         
         # Response successful code
         return ResponseSuccessful("Information edited successfully")
@@ -644,42 +647,10 @@ def EditCustomerIndividualInformation(request):
 
 
 
-# Create new Special Offer
+# Delete Customer
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def CreateCustomerIndividual(request):
-    try:
-        error = []
-    
-        # Verify if user is an employee
-        if not VerifyEmployee(request):
-            raise Exception("You are not an employee")
-        
-        # Check if special offer info is valid
-        # VerifyCustomerIndividualInformation(request, error)
-        
-        # Check if there is an error
-        if error:
-            raise Exception()
-        
-        # Edit special offer
-        CreateNewCustomerIndividual(request)        
-        
-        # Response
-        return ResponseSuccessful("Created new product successfully")
-          
-    except Exception as e:
-        # Response a error code and error content
-        if str(e):
-            error.append(str(e))
-        return ResponseError(error)
-    
-    
-    
-# Delete Special Offer
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def DeleteCustomerIndividual(request):
+def DeleteCustomer(request):
     try:     
         error = []
         
@@ -687,15 +658,15 @@ def DeleteCustomerIndividual(request):
         if not VerifyEmployee(request):
             raise Exception("You are not an employee")
         
-        # Check if special offer exists
-        if not VerifyCustomerIndividualExist(request):
-            raise Exception("Product does not exist")
+        # Check if customer exists
+        if not VerifyCustomerExist(request):
+            raise Exception("Customer does not exist")
         
-        # Delete special offer
-        DeleteCustomerIndividualWithID(request)
+        # Delete customer
+        DeleteCustomerWithID(request)
         
         # Response
-        return ResponseSuccessful("Deleted product successfully")
+        return ResponseSuccessful("Deleted customer successfully")
           
     except Exception as e:
         # Response a error code and error content

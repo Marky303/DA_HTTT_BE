@@ -10,9 +10,11 @@ class SpecialOfferSerializer(ModelSerializer):
         
 # Special offer - product serializer
 class SpecialOfferProductSerializer(ModelSerializer):
+    SpecialOffer = SpecialOfferSerializer()
+    
     class Meta:
         model = SpecialOfferProduct
-        fields = '__all__'
+        fields = ("id", "SpecialOffer")
         
 # Territory serializer
 class TerritorySerializer(ModelSerializer):
@@ -20,6 +22,7 @@ class TerritorySerializer(ModelSerializer):
         model = Territory
         fields = '__all__'
 
+# Product serializer
 class ProductSerializer(ModelSerializer):    
     class Meta:
         model = Product
@@ -59,14 +62,10 @@ class CustomerIndividualInfoSerializer(ModelSerializer):
         model = CustomerIndividual
         fields = '__all__'
         
-        
-# EXAMPLE SERIALIZER FOR TESTING
-# Note model for testing
-# from sales.models import Note
-# from rest_framework.serializers import ModelSerializer        
-
-# # Note serializer
-# class NoteSerializer(ModelSerializer):
-#     class Meta:
-#         model = Note
-#         fields = '__all__'
+class CustomerInfoSerializer(ModelSerializer):
+    CustomerStore = CustomerStoreInfoSerializer()
+    CustomerIndividual = CustomerIndividualInfoSerializer()
+    
+    class Meta:
+        model = Customer
+        fields = ("id", "Employee", "Territory", "CustomerStore", "CustomerIndividual")

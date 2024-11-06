@@ -7,19 +7,11 @@ def ResponseSuccessful(content, status=status.HTTP_202_ACCEPTED):
     content = {'detail': content}
     return Response(content, status=status)
 
+# Reponse the analysis result object for rendering
+def ResponseObject(content, status=status.HTTP_202_ACCEPTED):
+    return Response(content, status=status)
 
 # Response if the action incurred error
 def ResponseError(error=["Something happened"]):
     content = {'error': error}
     return Response(content, status=status.HTTP_400_BAD_REQUEST)    
-
-
-# Response a list of object
-def ResponseList(content, totalPage, status=status.HTTP_202_ACCEPTED):
-    body = {
-        "data": content,
-        "totalPage": totalPage
-    }
-    return Response(body, status=status)    
-
-    
