@@ -89,8 +89,8 @@ class SalesOrderDetailFact(models.Model):
     LineTotal               = models.DecimalField(max_digits=decimalMaxDigit, decimal_places=decimalPlace, null=False, default=0)
     
     # Foreign keys
-    Product             = models.ForeignKey(EmployeeDim, on_delete=models.SET_NULL, null=True)
-    SpecialOffer        = models.ForeignKey(CustomerDim, on_delete=models.SET_NULL, null=True)
+    Product             = models.ForeignKey(ProductDim, on_delete=models.SET_NULL, null=True)
+    SpecialOffer        = models.ForeignKey(SpecialOfferDim, on_delete=models.SET_NULL, null=True)
     SalesOrder          = models.ForeignKey(SalesOrderHeaderFact, on_delete=models.CASCADE, null=True)
     
     # Admin page default function
