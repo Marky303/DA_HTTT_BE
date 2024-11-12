@@ -1,0 +1,5 @@
+This is the query that i used on the datawarehouse
+<query>
+What is the best graphtype that can be used to present the result data of this query?
+ONLY RESPONSE WITH ONE OF THESE WORDS "bar", "pie", "line" or "none" ("none" should only be your answer when there is no graph that can be used to present the result data)
+DO NOT ADD ANY EXPLAINATION

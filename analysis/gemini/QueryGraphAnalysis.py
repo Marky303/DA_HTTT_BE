@@ -1,31 +1,17 @@
 import os
 from dotenv import load_dotenv
 import re
-from enum import Enum
 import psycopg
 import decimal
 import datetime
+import matplotlib.pyplot as plt
+import io
+import base64
+
+# Import gemini function
+from analysis.gemini.Functions.GenerateResponse import *
+
 load_dotenv()
-
-# GEMINI RELATED___________________________________________________________
-# Define enum type
-class Graph(Enum):
-    BAR = 'bar'
-    LINE = 'line'
-    PIE = 'pie'
-    NONE = 'none'
-
-def QueryPostgresDatamart(query: str, graphType: Graph, graphName: str):
-    """Create a Postgres query as parameter to query the infomation asked by the user in the Postgres datamart. The function will search the postgres database using the query and return the user the table result. After that, the function will draw a graph based on the graphType parameter. For bar graph and pie graph, the first column of the result in the query MUST be categories or labels (the x axis). For line graph, the first column (usually a date column) is the x axis.
-    Args:
-        query: Create a query that will be queried in the Postgres datamart. The query must be on a single line. Only generate the syntatically correct and bare query, without any newline or other special characters. You can rename the columns of the query result to match the content. 
-        graphType: The type of graph that the function will draw after querying the result. graphType is of enum(string) type. ONLY CHOOSE "none" WHEN THE DATA CANNOT BE DESCRIBED IN THESE GRAPHS.
-        graphName: The name of the graph that the function will draw. If the graphType is "none", the graph name will also be "none".
-    Returns:
-        The result of the query (and maybe a graph)
-    """
-    return []
-
 
 # QUERY RELATED____________________________________________________________
 # Preprocessing the query
@@ -69,7 +55,7 @@ def Query(query):
     # Preprocess the query (adding quotation marks...)
     processedQuery = PreprocessQuery(query)
     
-    print(processedQuery)
+    # print(processedQuery)
     
     # Create result object
     result = {
@@ -110,12 +96,76 @@ def Query(query):
 
              
     # TEST
-    print(result)
+    # print(result)
              
     return result
 
 
 # GRAPH RELATED____________________________________________________________
-def Graph(graphType, graphName):
-    # print(graphType + graphName)
-    pass
+def Graph(graphType, data, result):
+    # Preprocess graphtype
+    graphType = graphType.replace("\n", "")
+    
+    # Draw the graph
+    if graphType == 'line':
+        # Extract x-axis label (first key)
+        x_axis_label = list(data[0].keys())[0]
+        x_axis = [entry[x_axis_label] for entry in data]
+
+        # Extract y-axis data for each remaining key
+        y_axes = {key: [entry[key] for entry in data] for key in data[0] if key != x_axis_label}
+
+        # Plot each y-axis on a separate plot
+        for label, y_axis in y_axes.items():
+            plt.figure(figsize=(10, 6))
+            plt.plot(x_axis, y_axis, marker='o', linestyle='-', linewidth=2, markersize=6, label=label)
+
+            # Add labels and title
+            plt.xlabel(x_axis_label)
+            plt.ylabel(label)
+            plt.title(f'{label} over {x_axis_label}')
+            plt.legend()  # Show legend for the y-axis label
+            plt.grid(True)
+
+            # Show each plot
+            # plt.show()
+            
+            # Create data for this particular window
+            temporaryData = []
+            for (x, y) in zip(x_axis, y_axis):
+                item = {
+                    x_axis_label: x,
+                    label: y
+                }
+                temporaryData.append(item)
+        
+            # Convert the plot to hase64
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            
+            # Generate an overview for the graph
+            overview = GenerateGraphOverview(temporaryData, buffer)
+            
+            # Close the buffer 
+            buffer.close()
+            
+            # Create result template
+            item = {
+                "type": "graphResult",
+                "graphType": graphType,
+                "graph": img_base64,
+                "overview": overview
+            }
+
+            # Add temporary result to list
+            result['list'].append(item)
+        
+    elif graphType == 'bar':
+        pass
+    
+    elif graphType == 'pie':
+        pass
+    
+    return result

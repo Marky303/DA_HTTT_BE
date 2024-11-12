@@ -409,8 +409,6 @@ def CreateSalesOrderDetailCRUD(request, headerID):
                 if not specialOffer.MinQty <= int(OrderQty):
                     continue
             
-            print("Check")
-            
             # Check highest rate
             if highestDiscount < specialOffer.DiscountPct:
                 highestDiscount = specialOffer.DiscountPct

@@ -38,12 +38,14 @@ def GeminiController(request):
             queryExplainResult  = GenerateQueryExplaination(queryResult['query'])
             result['list'].append(queryExplainResult)
             
-            # Draw a graph and append the graph to the final result???
-            graphResult         = Graph(fc.args['graphType'], fc.args['graphName'])
+            # Get the graph type
+            graphType           = GenerateGraphType(queryResult['query'])
             
+            # Draw graphs and append the graph to the final result
+            Graph(graphType, queryResult['data'], result)
             
-            # Get some sort of overview and append to the final result??
-            
+            # # Get some sort of overview and append to the final result??
+            # graphExplainResult  = GenerateGraphExplaination(graphResult)
             
         # Check if it is an analysis function
         elif fc.name == "DeezNut":

@@ -1,0 +1,14 @@
+[
+  { "month": 1.0, "cumulativetotaldue": 4458337.55 },
+  { "month": 2.0, "cumulativetotaldue": 6107389.53 },
+  { "month": 3.0, "cumulativetotaldue": 9443737.06 },
+  { "month": 4.0, "cumulativetotaldue": 11315660.57 },
+  { "month": 5.0, "cumulativetotaldue": 14771757.01 },
+  { "month": 6.0, "cumulativetotaldue": 19382404.13 },
+  { "month": 7.0, "cumulativetotaldue": 23222635.54 },
+  { "month": 8.0, "cumulativetotaldue": 25665086.55 },
+  { "month": 9.0, "cumulativetotaldue": 29546810.58 },
+  { "month": 10.0, "cumulativetotaldue": 32404870.56 },
+  { "month": 11.0, "cumulativetotaldue": 34502023.37 },
+  { "month": 12.0, "cumulativetotaldue": 37678871.22 }
+]
