@@ -39,10 +39,11 @@ def GeminiController(request):
             result['list'].append(queryExplainResult)
             
             # Get the graph type
-            graphType           = GenerateGraphType(queryResult['query'])
+            response            = GenerateGraphType(queryResult['query'])
+            fc = response.candidates[0].content.parts[0].function_call
             
             # Draw graphs and append the graph to the final result
-            Graph(graphType, queryResult['data'], result)
+            Graph(fc.args['graphType'], queryResult['data'], result)
             
         # Check if it is an analysis function
         elif fc.name == "DeezNut":

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from PIL import Image
 from django.conf import settings
-
+from enum import Enum
 
 # GEMINI RELATED___________________________________________________________
 def QueryPostgresDatamart(query: str):
@@ -13,6 +13,21 @@ def QueryPostgresDatamart(query: str):
         query: Create a query that will be queried in the Postgres datamart. The query must be on a single line. Only generate the syntatically correct and bare query, without any newline or other special characters. You can rename the columns of the query result to match the content. 
     Returns:
         The result of the query (and maybe a graph)
+    """
+    return []
+
+class Graph(Enum):
+    BAR = 'bar'
+    LINE = 'line'
+    # PIE = 'pie'
+    NONE = 'none'
+
+def DrawGraph(graphType: Graph):
+    """Draw a graph based on the user's query
+    Args:
+        graphType: Choose a suitable graph type that can present the data result of the user's query. "none" should only be your answer when there is no graph that can be used to present the result data
+    Returns:
+        Draw a graph for the user's query
     """
     return []
 
@@ -104,6 +119,7 @@ def GenerateGraphType(query):
         genai.configure(api_key=os.getenv("GOOGLE_AI_API_KEY"))
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
+            tools=[DrawGraph],
             system_instruction=instruction
         )
 
@@ -119,7 +135,7 @@ def GenerateGraphType(query):
         response = chat.send_message(graphTypePrompt)
         
         # Return    
-        return response.text
+        return response
             
     except Exception as e:
         # Notify
