@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+# ETL
+from analysis.api.Functions.CRUD import *
+
 # Manager class for user account with customized create user function
 class EmployeeManager(BaseUserManager):
     # Function to create new user
@@ -19,6 +22,10 @@ class EmployeeManager(BaseUserManager):
         
         # Finally save the user
         user.save()
+        
+        # ETL
+        CreateEmployeeDimETL(user)
+        
         return user
 
 # Custom user model goes here.

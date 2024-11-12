@@ -13,6 +13,7 @@ dateTimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 def VerifySpecialOfferExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     specialOfferInfo = ast.literal_eval(dict)
     
     # Get special offer id
@@ -29,6 +30,7 @@ def VerifySpecialOfferExist(request):
 def VerifySpecialOfferInformation(request, error):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     specialOfferInfo = ast.literal_eval(dict)
     
     #.3 Check MinQty < MaxQty
@@ -54,6 +56,7 @@ def VerifySpecialOfferInformation(request, error):
 def VerifyProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     productInfo = ast.literal_eval(dict)
     
     # Get special offer id
@@ -72,6 +75,7 @@ def VerifyProductInformation(request, error):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     productInfo = ast.literal_eval(dict)
     
     # Verify steps...
@@ -83,6 +87,7 @@ def VerifyProductInformation(request, error):
 def VerifySpecialOfferProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     info = ast.literal_eval(dict)
     
     # Get ids from dict
@@ -104,6 +109,7 @@ def VerifySpecialOfferProductExist(request):
 def VerifySalesOrderExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     salesOrder = ast.literal_eval(dict)
     
     # Get salesorderheader id from dict
@@ -120,6 +126,7 @@ def VerifySalesOrderExist(request):
 def VerifyCustomerExist(request):    
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     customer = ast.literal_eval(dict)
     
     # Get special offer id
@@ -129,3 +136,14 @@ def VerifyCustomerExist(request):
     exists = Customer.objects.filter(id=CustomerID).exists()
 
     return exists
+
+def VerifyCustomerInfo(request):
+    # Converting request.body to dictionary type
+    dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
+    customer = ast.literal_eval(dict)
+    
+    # Check 
+    if (not "CustomerStore" in customer) and (not "CustomerIndividual" in customer):
+        return False
+    return True

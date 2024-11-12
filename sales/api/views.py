@@ -597,13 +597,14 @@ def CreateCustomer(request):
         # Check if store or customer is available
         # Converting request.body to dictionary type
         dict = request.body.decode("UTF-8")
+        dict = dict.replace("null", "None")
         info = ast.literal_eval(dict)
         
         if not ("CustomerStore" in info or "CustomerIndividual" in info):
             return ResponseError("Bruhhhh")
         
         # Edit customer
-        storeID = CreateCustomerCRUD(request)
+        storeID = CreateNewCustomerStore(request)
         individualID = CreateNewCustomerIndividual(request)
         CreateNewCustomer(request, storeID, individualID)    
         
@@ -628,6 +629,10 @@ def EditCustomer(request):
         # Verify is user is an employee
         if not VerifyCustomerExist(request):
             raise Exception("Don't have a customer")
+        
+        # Verify if customer info has either store or individual
+        if not VerifyCustomerInfo(request):
+            raise Exception("Customer must have either a store or individual")
         
         # Check if there is an error
         if error:

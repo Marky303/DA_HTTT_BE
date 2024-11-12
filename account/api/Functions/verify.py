@@ -21,6 +21,7 @@ def VerifyEmployeeInformation(request):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
+    dict = dict.replace("null", "None")
     userinfo = ast.literal_eval(dict)
     
     # Check if there is any error in user information
@@ -39,8 +40,8 @@ def VerifyEmployeeInformation(request):
     #     error.append("Fields must not be empty")
 
     #.3 Check if phone number is correct
-    if not re.fullmatch(phone_number_pattern, userinfo['PhoneNumber']):
-        error.append("Wrong phone number format")
+    # if not re.fullmatch(phone_number_pattern, userinfo['PhoneNumber']):
+    #     error.append("Wrong phone number format")
 
     #.x Check if ...
     

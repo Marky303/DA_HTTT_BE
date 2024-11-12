@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import re
 from enum import Enum
 import psycopg
+import decimal
+import datetime
 load_dotenv()
 
 # GEMINI RELATED___________________________________________________________
@@ -67,7 +69,7 @@ def Query(query):
     # Preprocess the query (adding quotation marks...)
     processedQuery = PreprocessQuery(query)
     
-    # print(processedQuery)
+    print(processedQuery)
     
     # Create result object
     result = {
@@ -91,9 +93,24 @@ def Query(query):
             columns = [desc[0] for desc in cursor.description]
             
             # Fetch all rows as a list of dictionaries
-            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            data = []
+            for row in cursor.fetchall():
+                # Create dictionary for each row and convert decimals and datetimes
+                row_dict = {
+                    col: (
+                        float(value) if isinstance(value, decimal.Decimal) else
+                        value.isoformat() if isinstance(value, datetime.datetime) else
+                        value
+                    )
+                    for col, value in zip(columns, row)
+                }
+                data.append(row_dict)
             
             result['data'] = data
+
+             
+    # TEST
+    print(result)
              
     return result
 
