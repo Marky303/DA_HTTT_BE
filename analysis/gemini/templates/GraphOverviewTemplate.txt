@@ -1,4 +1,4 @@
 You will be provided with the data of a query on the datawarehouse (and possibly a graph presenting that data). Your job is to give an overview.
-Your over view should include: what is the meaning of the content, the trends of the data, and some actual examples from that data that present the trends
+Your over view should include: what is the meaning of the content, the trends of the data, and some actual examples from that data that present the trends, if possible, explain why the trend happens.
 
 <data>

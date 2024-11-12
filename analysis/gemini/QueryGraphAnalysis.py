@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 import io
 import base64
 
+# GRID THRESHOLD
+threshold = 50
+
 # Import gemini function
 from analysis.gemini.Functions.GenerateResponse import *
 
@@ -105,6 +108,7 @@ def Query(query):
 def Graph(graphType, data, result):
     # Preprocess graphtype
     graphType = graphType.replace("\n", "")
+    print("This graph is a " + graphType + " graph")
     
     # Draw the graph
     if graphType == 'line':
@@ -125,7 +129,12 @@ def Graph(graphType, data, result):
             plt.ylabel(label)
             plt.title(f'{label} over {x_axis_label}')
             plt.legend()  # Show legend for the y-axis label
-            plt.grid(True)
+            
+            # Conditionally add grid based on the number of points
+            if len(y_axis) <= threshold:
+                plt.grid(True)
+            else:
+                plt.grid(False)
 
             # Show each plot
             # plt.show()
@@ -163,9 +172,56 @@ def Graph(graphType, data, result):
             result['list'].append(item)
         
     elif graphType == 'bar':
-        pass
+        # Extract the category label (first key) and category values
+        category_label = list(data[0].keys())[0]
+        categories = [entry[category_label] for entry in data]
+
+        # Extract y-axis data for each remaining key
+        y_axes = {key: [entry[key] for entry in data] for key in data[0] if key != category_label}
+
+        # Plot each y-axis on separate bar graphs
+        for label, values in y_axes.items():
+            plt.figure(figsize=(8, 6))
+            plt.bar(categories, values, color='skyblue')
+            plt.xlabel(category_label)
+            plt.ylabel(label)
+            plt.title(f'Bar Graph of {label}')
+            
+            #plt.show()
+            
+            # Create data for this particular window
+            temporaryData = []
+            for (x, y) in zip(categories, values):
+                item = {
+                    category_label: x,
+                    label: y
+                }
+                temporaryData.append(item)
+        
+            # Convert the plot to hase64
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            
+            # Generate an overview for the graph
+            overview = GenerateGraphOverview(temporaryData, buffer)
+            
+            # Close the buffer 
+            buffer.close()
+            
+            # Create result template
+            item = {
+                "type": "graphResult",
+                "graphType": graphType,
+                "graph": img_base64,
+                "overview": overview
+            }
+
+            # Add temporary result to list
+            result['list'].append(item)
     
     elif graphType == 'pie':
-        pass
+        print("draw a pie")
     
     return result
