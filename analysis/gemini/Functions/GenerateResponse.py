@@ -16,18 +16,69 @@ def QueryPostgresDatamart(query: str):
     """
     return []
 
-class Graph(Enum):
+class GraphType(Enum):
     BAR = 'bar'
     LINE = 'line'
     # PIE = 'pie'
     NONE = 'none'
 
-def DrawGraph(graphType: Graph):
+def DrawGraph(graphType: GraphType):
     """Draw a graph based on the user's query
     Args:
         graphType: Choose a suitable graph type that can present the data result of the user's query. "none" should only be your answer when there is no graph that can be used to present the result data
     Returns:
         Draw a graph for the user's query
+    """
+    return []
+
+def PredictFromQueryData(query: str, step: int):
+    """Create a Postgres query as parameter to query the data needed in order to predict user's desired future trends. The result of the query must be the history data leading up. This function will predict future trends based on the data queried on the datamart using the query you created
+    Args:
+        query: Create a query that will be queried in the Postgres datamart. The query must be on a single line. Only generate the syntatically correct and bare query, without any newline or other special characters. The result table of the query must have the last column as the column used as data for the algorithm.
+        step: How many steps into the future that the algorithm should predict
+    Returns:
+        Prediction result for the user's prompt
+    Examples:
+        + If the user asked to predict the total money made by sales order in May 2013, the query should gives data about total money made monthly in the last 24 months leading up to May 2013 (from May 2011 to end of April 2013)
+            The query should be:
+            SELECT EXTRACT(MONTH FROM OrderDate) AS month,
+                EXTRACT(YEAR FROM OrderDate) AS year,
+                SUM(TotalDue) AS total_money_made
+            FROM analysis_salesorderheaderfact
+            WHERE OrderDate >= DATE '2011-05-01'
+                AND OrderDate < DATE '2013-05-01'
+            GROUP BY year, month
+            ORDER BY year, month;
+            The last column of the query, total_money_made, will be used as data for the algorithm
+            
+            The step should be : 1 (The next month May 2013)
+            
+        + If the user asked to predict the total money made by sales order in May and August 2013, the query should gives data about total money made monthly in the last 24 months leading up to May 2013 (from May 2011 to end of April 2013)
+            The query should be:
+            SELECT EXTRACT(MONTH FROM OrderDate) AS month,
+                EXTRACT(YEAR FROM OrderDate) AS year,
+                SUM(TotalDue) AS total_money_made
+            FROM analysis_salesorderheaderfact
+            WHERE OrderDate >= DATE '2011-05-01'
+                AND OrderDate < DATE '2013-05-01'
+            GROUP BY year, month
+            ORDER BY year, month;
+            The last column of the query, total_money_made, will be used as data for the algorithm
+            
+            The step should be : 4 (4 months from May August: May, June, July and August)
+            
+        + If the user asked to predict the total money made by sales order in 3 days starting from 2013-01-24, the query should gives data about total money made daily in the last 24 months leading up to 2013-01-24 (from 2011-01-23 to 2013-01-23)
+            The query should be:
+            SELECT OrderDate AS date,
+                SUM(TotalDue) AS total_money_made
+            FROM analysis_salesorderheaderfact
+            WHERE OrderDate >= DATE '2011-01-23'
+                AND OrderDate < DATE '2013-01-23'
+            GROUP BY date
+            ORDER BY date;
+            The last column of the query, total_money_made, will be used as data for the algorithm
+        
+            The step should be: 3 (3 days)
     """
     return []
 
@@ -45,7 +96,7 @@ def GenerateInitialResponse(prompt):
         genai.configure(api_key=os.getenv("GOOGLE_AI_API_KEY"))
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
-            tools=[QueryPostgresDatamart],
+            tools=[QueryPostgresDatamart, PredictFromQueryData],
             system_instruction=instruction
         )
 

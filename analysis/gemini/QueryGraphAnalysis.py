@@ -7,6 +7,8 @@ import datetime
 import matplotlib.pyplot as plt
 import io
 import base64
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
 # GRID THRESHOLD
 threshold = 50
@@ -108,7 +110,7 @@ def Query(query):
 def Graph(graphType, data, result):
     # Preprocess graphtype
     graphType = graphType.replace("\n", "")
-    print("This graph is a " + graphType + " graph")
+    # print("This graph is a " + graphType + " graph")
     
     # Draw the graph
     if graphType == 'line':
@@ -223,5 +225,95 @@ def Graph(graphType, data, result):
     
     elif graphType == 'pie':
         print("draw a pie")
+        
+    elif graphType == 'predict':
+        # Separate the data based on 'original' attribute
+        original_values = [item["value"] for item in data if item["original"]]
+        predicted_values = [item["value"] for item in data if not item["original"]]
+        original_indices = list(range(len(original_values)))
+        predicted_indices = list(range(len(original_values), len(original_values) + len(predicted_values)))
+
+        # Plotting
+        plt.figure(figsize=(10, 6))
+        plt.plot(original_indices, original_values, color="blue", label="Original Data", marker="o")
+        plt.plot(predicted_indices, predicted_values, color="orange", label="Predicted Data", marker="o")
+
+        # Connect the last original data point to the first predicted data point with the same color as the predicted line
+        plt.plot([original_indices[-1], predicted_indices[0]], [original_values[-1], predicted_values[0]], color="orange", linestyle="--")
+
+        plt.xlabel("Index")
+        plt.ylabel("Value")
+        plt.title("Original vs Predicted Data (Connected)")
+        plt.legend()
+        plt.grid(True)
+        plt.tight_layout()
+        
+        # plt.show()
     
-    return result
+        # Create data for this particular window
+        # temporaryData = []
+        # for (x, y) in zip(x_axis, y_axis):
+        #     item = {
+        #         x_axis_label: x,
+        #         label: y
+        #     }
+        #     temporaryData.append(item)
+    
+        # Convert the plot to hase64
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        
+        # Generate an overview for the graph
+        # overview = GenerateGraphOverview(temporaryData, buffer)
+        
+        # Close the buffer 
+        buffer.close()
+        
+        # Create result template
+        item = {
+            "type": "graphResult",
+            "graphType": graphType,
+            "graph": img_base64,
+            "overview": None
+        }
+
+        # Add temporary result to list
+        result['list'].append(item)
+
+def Predict(data, step):
+    # Extract 
+    y_axis_label = list(data[0].keys())[-1]
+    y_axis = [entry[y_axis_label] for entry in data]
+    
+    # Step 2: Prepare data for training
+    x = np.arange(len(y_axis)).reshape(-1, 1)  # Positions as x (0, 1, 2, ...)
+    y = np.array(y_axis)  # Values as y
+
+    # Step 3: Train linear regression model
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # Step 4: Predict future steps
+    future_steps = np.array([len(y_axis) + i for i in range(1, step + 1)]).reshape(-1, 1)  # Next 3 steps
+    predictions = model.predict(future_steps)
+
+    # Create data for graphing
+    graphData = []
+    for item in y_axis:
+        template = {
+            "original": True,
+            "value": item
+        }
+        graphData.append(template)
+    
+    for item in predictions:
+        template = {
+            "original": False,
+            "value": float(item)
+        }
+        graphData.append(template)
+        
+    print(graphData)
+    return graphData

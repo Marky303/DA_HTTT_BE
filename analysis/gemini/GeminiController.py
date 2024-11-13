@@ -5,7 +5,7 @@ from analysis.gemini.Functions.GetPromptContent import GetPromptContent
 from analysis.gemini.Functions.GenerateResponse import *
 
 # Call functions
-from analysis.gemini.QueryGraphAnalysis import Query, Graph
+from analysis.gemini.QueryGraphAnalysis import Query, Graph, Predict
 
 # Process the prompt and return a JSON analysis result object
 def GeminiController(request):
@@ -46,9 +46,23 @@ def GeminiController(request):
             Graph(fc.args['graphType'], queryResult['data'], result)
             
         # Check if it is an analysis function
-        elif fc.name == "DeezNut":
-            # TODO
-            pass 
+        elif fc.name == "PredictFromQueryData":
+            # Query and append query result to the final result
+            queryResult         = Query(fc.args['query'])
+            result['list'].append(queryResult)
+            
+            # Explain the query... like bruh
+            queryExplainResult  = GenerateQueryExplaination(queryResult['query'])
+            result['list'].append(queryExplainResult)
+            
+            # Predict???
+            graphData = Predict(result['list'][-2]['data'], int(fc.args['step']))
+            
+            # Draw predict graph
+            Graph("predict", graphData, result)
+            
+            
+            
         
     else:
         # Create a text and append to the final result
