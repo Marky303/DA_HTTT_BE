@@ -182,4 +182,83 @@ def CreateSalesOrderHeaderFactETL(object):
     
     
 def EditSalesOrderHeaderFactETL(object):
-    pass
+    # Get header object 
+    salesOrderHeaderFact = SalesOrderHeaderFact.objects.get(id=object.id)
+    
+    # Get employee
+    employeeID = object.Employee.id
+    employee   = EmployeeDim.objects.get(id=employeeID)
+    
+    # Get customer
+    customerID = object.Customer.id
+    customer   = CustomerDim.objects.get(id=customerID)
+    
+    # Edit information
+    salesOrderHeaderFact.OrderDate  = object.OrderDate
+    salesOrderHeaderFact.SubTotal   = object.SubTotal
+    salesOrderHeaderFact.TaxAmt     = object.TaxAmt
+    salesOrderHeaderFact.Freight    = object.Freight
+    salesOrderHeaderFact.TotalDue   = object.TotalDue
+    salesOrderHeaderFact.employee   = employee
+    salesOrderHeaderFact.customer   = customer
+    
+    # Save information
+    salesOrderHeaderFact.save()
+    
+
+
+def DeleteSalesOrderHeaderFactETL(object):
+    # Get header object 
+    salesOrderHeaderFact = SalesOrderHeaderFact.objects.get(id=object.id)
+    
+    # Delete 
+    salesOrderHeaderFact.delete()
+    
+    
+    
+# Sales order detail related__________________________________________________
+def CreateSalesOrderDetailFactETL(object):
+    
+    # Get foreign keys
+    product         = ProductDim.objects.get(id=object.Product.id)
+    specialOffer    = None
+    if object.SpecialOffer:
+        specialOffer    = SpecialOfferDim.objects.get(id=object.SpecialOffer.id)
+    salesOrder      = SalesOrderHeaderFact.objects.get(id=object.SalesOrder.id) 
+    
+    # Create new object
+    salesOrderDetailFact = SalesOrderDetailFact(id=object.id,
+                                                OrderQty=object.OrderQty,
+                                                LineTotal=object.LineTotal,
+                                                Product=product,
+                                                SpecialOffer=specialOffer,
+                                                SalesOrder=salesOrder)
+    
+    # Save object
+    salesOrderDetailFact.save()
+
+
+
+# def EditSalesOrderDetailFactETL(object):
+#     # Get object
+#     salesOrderDetailFact = SalesOrderDetailFact.objects.get(id=object.id)
+    
+#     # Get foreign keys
+#     product         = ProductDim.objects.get(id=object.Product.id)
+#     specialOffer    = SpecialOfferDim.objects.get(id=object.SpecialOffer.id)
+#     salesOrder      = SalesOrderHeaderFact.objects.get(id=object.SalesOrder.id) 
+    
+#     # Edit information
+#     salesOrderDetailFact.OrderQty = object.OrderQty
+#     salesOrderDetailFact.OrderQty = object.OrderQty
+
+
+
+def DeleteSalesOrderDetailFactETL(object):
+    # Get object
+    salesOrderDetailFact = SalesOrderDetailFact.objects.get(id=object.id)
+    
+    # Delete 
+    salesOrderDetailFact.delete()
+    
+

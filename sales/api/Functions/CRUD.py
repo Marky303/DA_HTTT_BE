@@ -387,7 +387,7 @@ def CreateSalesOrderDetailCRUD(request, headerID):
         
         # Filter special offers
         highestDiscount = Decimal(0)
-        bestSpecialOffer = None
+        bestSpecialOffer = SpecialOffer.objects.get(id=1)
         for specialOfferProduct in specialOfferProducts:            
             # Get special offer
             specialOffer = specialOfferProduct.SpecialOffer 
@@ -441,15 +441,16 @@ def CreateSalesOrderDetailCRUD(request, headerID):
         item.save()
         
         # ETL
-        
+        CreateSalesOrderDetailFactETL(item)
                 
+    
     # Update subTotal and other numbers of sales order
     salesOrderHeader.SubTotal = subTotal
     salesOrderHeader.TotalDue = subTotal + salesOrderHeader.Freight + salesOrderHeader.TaxAmt
     salesOrderHeader.save()
     
     # ETL
-    # CreateSalesOrderHeaderFactETL(salesOrderHeader)
+    EditSalesOrderHeaderFactETL(salesOrderHeader)
     
     return True
                     
@@ -488,6 +489,9 @@ def CreateSalesOrderHeaderCRUD(request):
     
     # Save object to database
     salesOrderHeader.save()
+    
+    # ETL
+    CreateSalesOrderHeaderFactETL(salesOrderHeader)
     
     # Return id for further processing
     return salesOrderHeader.id
@@ -532,6 +536,9 @@ def EditSalesOrderHeaderCRUD(request):
     # Save object to database
     salesOrder.save()
     
+    # ETL
+    EditSalesOrderHeaderFactETL(salesOrder)
+    
     # Return id for further processing
     return salesOrder.id
 
@@ -547,6 +554,9 @@ def DeleteAllSalesOrderDetailCRUD(headerID):
     
     # Delete the list
     for salesOrderDetail in salesOrderDetailList:
+        # ETL
+        DeleteSalesOrderDetailFactETL(salesOrderDetail)
+        
         salesOrderDetail.delete()
     
 
@@ -562,6 +572,9 @@ def DeleteSalesOrderWithRequestCRUD(request):
     
     # Get sales order object
     salesOrder            = SalesOrderHeader.objects.get(id=salesOrderHeaderID)
+    
+    # ETL
+    DeleteSalesOrderHeaderFactETL(salesOrder)
     
     # Delete sales order object
     salesOrder.delete()
