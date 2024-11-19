@@ -12,7 +12,7 @@ def SaveNewEmployeeInformation(request):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
+    # dict = dict.replace("null", "None")
     userinfo = ast.literal_eval(dict)
     
     # Extract new information from request
