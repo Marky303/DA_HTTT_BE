@@ -597,7 +597,7 @@ def CreateCustomer(request):
         # Check if store or customer is available
         # Converting request.body to dictionary type
         dict = request.body.decode("UTF-8")
-        dict = dict.replace("null", "None")
+        # dict = dict.replace("null", "None")
         info = ast.literal_eval(dict)
         
         if not ("CustomerStore" in info or "CustomerIndividual" in info):
