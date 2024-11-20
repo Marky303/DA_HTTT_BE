@@ -1,7 +1,8 @@
 import os 
-import ast
+import json
 from dotenv import load_dotenv
 from datetime import datetime
+
 
 # Import models
 from sales.models import *
@@ -14,7 +15,7 @@ def VerifySpecialOfferExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    specialOfferInfo = json.loads(dict)
     
     # Get special offer id
     specialOfferID = specialOfferInfo['specialOfferID']
@@ -31,7 +32,7 @@ def VerifySpecialOfferInformation(request, error):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    specialOfferInfo = json.loads(dict)    
     
     #.3 Check MinQty < MaxQty
     if not int(specialOfferInfo['MinQty']) < int(specialOfferInfo['MaxQty']):
@@ -57,7 +58,7 @@ def VerifyProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    productInfo = ast.literal_eval(dict)
+    productInfo = json.loads(dict)
     
     # Get special offer id
     productID = productInfo['productID']
@@ -76,7 +77,7 @@ def VerifyProductInformation(request, error):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    productInfo = ast.literal_eval(dict)
+    productInfo = json.loads(dict)
     
     # Verify steps...
     
@@ -88,7 +89,7 @@ def VerifySpecialOfferProductExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    info = json.loads(dict)
     
     # Get ids from dict
     specialOfferID   = info['specialOfferID']
@@ -110,7 +111,7 @@ def VerifySalesOrderExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    salesOrder = ast.literal_eval(dict)
+    salesOrder = json.loads(dict)
     
     # Get salesorderheader id from dict
     salesOrderHeaderID   = salesOrder['salesOrderHeaderID']
@@ -127,7 +128,7 @@ def VerifyCustomerExist(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    customer = ast.literal_eval(dict)
+    customer = json.loads(dict)
     
     # Get special offer id
     CustomerID = customer['CustomerID']
@@ -141,7 +142,7 @@ def VerifyCustomerInfo(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    customer = ast.literal_eval(dict)
+    customer = json.loads(dict)
     
     # Check 
     if (not "CustomerStore" in customer) and (not "CustomerIndividual" in customer):
