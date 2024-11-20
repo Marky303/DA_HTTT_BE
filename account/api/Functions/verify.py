@@ -1,4 +1,4 @@
-import ast
+import json
 import re
 
 # Import models
@@ -22,7 +22,7 @@ def VerifyEmployeeInformation(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
     # dict = dict.replace("null", "None")
-    userinfo = ast.literal_eval(dict)
+    userinfo = json.loads(dict)
     
     # Check if there is any error in user information
     error = []

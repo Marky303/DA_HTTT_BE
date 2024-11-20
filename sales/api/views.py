@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+import json
 
 # Import serializers
 from .serializers import *
@@ -187,6 +188,10 @@ def EditProduct(request):
         error = []
         
         # Verify if user is an employee
+        if not VerifyEmployee(request):
+            raise Exception("You are not an employee")
+        
+        # Verify if product exists
         if not VerifyProductExist(request):
             raise Exception("Product does not exist")
                 
@@ -598,7 +603,7 @@ def CreateCustomer(request):
         # Converting request.body to dictionary type
         dict = request.body.decode("UTF-8")
         # dict = dict.replace("null", "None")
-        info = ast.literal_eval(dict)
+        info = json.loads(dict)
         
         if not ("CustomerStore" in info or "CustomerIndividual" in info):
             return ResponseError("Bruhhhh")
