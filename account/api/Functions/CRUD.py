@@ -1,4 +1,4 @@
-import ast
+import json
 
 # Import models
 from account.models import *
@@ -12,8 +12,8 @@ def SaveNewEmployeeInformation(request):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    userinfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    userinfo = json.loads(dict)
     
     # Extract new information from request
     new_name = userinfo['name']

@@ -1,9 +1,10 @@
-import ast
+import json
 from datetime import datetime
 import random
 import string
 from decimal import Decimal
 import math
+
 
 # Import ETL functions
 from analysis.api.Functions.CRUD import *
@@ -25,8 +26,8 @@ def getPageIndex(pageNumber, pageSize):
 def GetAllSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    specialOfferInfo = json.loads(dict)
     
     # Get the page number
     page = specialOfferInfo["page"]
@@ -51,8 +52,8 @@ def GetAllSpecialOfferCRUD(request):
 def EditSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    specialOfferInfo = json.loads(dict)
     
     # Get special offer info from dict
     specialOfferID          = specialOfferInfo['specialOfferID']
@@ -89,8 +90,8 @@ def EditSpecialOfferCRUD(request):
 def CreateSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    specialOfferInfo = json.loads(dict)
     
     # Get special offer info from dict
     Description             = specialOfferInfo['Description']
@@ -121,8 +122,8 @@ def CreateSpecialOfferCRUD(request):
 def DeleteSpecialOfferCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    specialOfferInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    specialOfferInfo = json.loads(dict)
     
     # Get special offer id from dict
     specialOfferID   = specialOfferInfo['specialOfferID']
@@ -143,8 +144,8 @@ def DeleteSpecialOfferCRUD(request):
 def CreateSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    info = json.loads(dict)
     
     # Get ids from dict
     specialOfferID   = info['specialOfferID']
@@ -166,8 +167,8 @@ def CreateSpecialOfferProductCRUD(request):
 def DeleteSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    info = json.loads(dict)
     
     # Get ids from dict
     specialOfferID   = info['specialOfferID']
@@ -189,8 +190,8 @@ def DeleteSpecialOfferProductCRUD(request):
 def GetSpecialOfferProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    info = json.loads(dict)
     
     # Get product
     product = Product.objects.get(id=info['productID'])
@@ -204,8 +205,8 @@ def GetSpecialOfferProductCRUD(request):
 def GetTerritoryCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    territoryInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    territoryInfo = json.loads(dict)
     
     # Get the page number
     page = territoryInfo["page"]
@@ -231,8 +232,8 @@ def GetTerritoryCRUD(request):
 def GetAllProduct(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    productInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    productInfo = json.loads(dict)
     
     # Get the page number
     page = productInfo["page"]
@@ -257,7 +258,7 @@ def GetAllProduct(request):
 def EditProductCRUD(request):
     # Converting request.body to dictionary type
     dict        = request.body.decode("UTF-8")
-    productInfo = ast.literal_eval(dict)
+    productInfo = json.loads(dict)
     
     # Extract new information from request
     productID           = productInfo['productID']
@@ -300,8 +301,8 @@ def EditProductCRUD(request):
 def CreateProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    productInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    productInfo = json.loads(dict)
     
     # Get product info from dict
     Name                = productInfo['Name']
@@ -330,8 +331,8 @@ def CreateProductCRUD(request):
 def DeleteProductCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    productInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    productInfo = json.loads(dict)
     
     # Get product id from dict
     ProductID   = productInfo['productID']
@@ -364,8 +365,8 @@ def CreateSalesOrderDetailCRUD(request, headerID):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    salesOrderInfo      = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    salesOrderInfo      = json.loads(dict)
     salesOrderDetails   = salesOrderInfo["SalesOrderDetails"]
     
     # Calculate subTotal for SalesOrderHeader 
@@ -460,8 +461,8 @@ def CreateSalesOrderDetailCRUD(request, headerID):
 def CreateSalesOrderHeaderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    salesOrderInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    salesOrderInfo = json.loads(dict)
 
     # Get Sales order info from dict
     OrderDate   = salesOrderInfo['OrderDate']
@@ -502,8 +503,8 @@ def CreateSalesOrderHeaderCRUD(request):
 def EditSalesOrderHeaderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    salesOrderInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    salesOrderInfo = json.loads(dict)
 
     # Get Sales order info from dict
     salesOrderID    = salesOrderInfo['id']
@@ -564,8 +565,8 @@ def DeleteAllSalesOrderDetailCRUD(headerID):
 def DeleteSalesOrderWithRequestCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    salesOrder = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    salesOrder = json.loads(dict)
     
     # Get salesorderheader id from dict
     salesOrderHeaderID   = salesOrder['salesOrderHeaderID']
@@ -591,8 +592,8 @@ def DeleteSalesOrderWithID(salesOrderHeaderID:int):
 def GetSalesOrderCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    customerInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    customerInfo = json.loads(dict)
     
     # Get the page number
     page = customerInfo["page"]
@@ -617,8 +618,8 @@ def GetSalesOrderCRUD(request):
 def CreateNewCustomerStore(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    info = json.loads(dict)
     
     # Check if customer store is created
     if "CustomerStore" in info:
@@ -654,8 +655,8 @@ def CreateNewCustomerStore(request):
 def CreateNewCustomerIndividual(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    info = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    info = json.loads(dict)
     
     # Check if customer store is created
     if "CustomerIndividual" in info:
@@ -700,8 +701,8 @@ def CreateNewCustomer(request, storeID, individualID):
     
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    customerInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    customerInfo = json.loads(dict)
     user = request.user
     territory = Territory.objects.get(id=customerInfo['territoryID'])
     
@@ -719,8 +720,8 @@ def CreateNewCustomer(request, storeID, individualID):
 def EditCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    customerInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    customerInfo = json.loads(dict)
     
     # Get customer id from request
     CustomerID = customerInfo["CustomerID"]
@@ -836,8 +837,8 @@ def EditCustomerCRUD(request):
 def DeleteCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    customerInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    customerInfo = json.loads(dict)
     
     # Get customer id from dict
     CustomerID   = customerInfo['CustomerID']
@@ -862,8 +863,8 @@ def DeleteCustomerCRUD(request):
 def GetCustomerCRUD(request):
     # Converting request.body to dictionary type
     dict = request.body.decode("UTF-8")
-    dict = dict.replace("null", "None")
-    customerInfo = ast.literal_eval(dict)
+    # dict = dict.replace("null", "None")
+    customerInfo = json.loads(dict)
     
     # Get the page number
     page = customerInfo["page"]
