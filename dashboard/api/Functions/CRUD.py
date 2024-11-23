@@ -160,8 +160,8 @@ def getTopTerritoryCRUD():
     # Create result template
     result = [
         {
-            "territory_id": territory['Customer__Territory__id'],
-            "territory_name": territory['Customer__Territory__Name'],
+            "id": territory['Customer__Territory__id'],
+            "name": territory['Customer__Territory__Name'],
             "revenue": round(float(territory['total_revenue']), 2),
             "cost": round(float(territory['total_cost'] or 0), 2),
             # "profit": round(float(territory['profit']), 2),
