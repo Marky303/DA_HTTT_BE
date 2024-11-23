@@ -15,5 +15,8 @@ urlpatterns = [
     path('sales/', include('sales.api.urls')),
     
     # Analysis related endpoint
-    path('analysis/', include('analysis.api.urls'))
+    path('analysis/', include('analysis.api.urls')),
+    
+    # Dashboard related endpoint
+    path('dashboard/', include('dashboard.api.urls')),
 ]
