@@ -89,14 +89,14 @@ def getOverviewLastMonthsCRUD():
                 # Add to cost
                 cost += float(quantity) * float(singleCost)
         
-        # Calculate profit
-        profit = (float(revenue) if revenue else float(0)) - cost
+        # # Calculate profit
+        # profit = (float(revenue) if revenue else float(0)) - cost
         
         # Add the result for the month
         results.append({
             "time": month_start.strftime("%B %Y"),  # e.g., "November 2024"
             "revenue": round(float(revenue) if revenue else float(0), 1),
-            "profit": round(profit, 1),
+            # "profit": round(profit, 1),
             "cost": round(cost, 1)
         })
     
@@ -150,9 +150,9 @@ def getTopTerritoryCRUD():
         )
     )
     
-    # Calculate profit for each territory
-    for territory in territories_data:
-        territory['profit'] = float(territory['total_revenue']) - float(territory['total_cost'] or 0)
+    # # Calculate profit for each territory
+    # for territory in territories_data:
+    #     territory['profit'] = float(territory['total_revenue']) - float(territory['total_cost'] or 0)
     
     # Sort by revenue and get 3 highest
     top_territories = sorted(territories_data, key=lambda x: x['total_revenue'], reverse=True)[:3]
@@ -164,7 +164,7 @@ def getTopTerritoryCRUD():
             "territory_name": territory['Customer__Territory__Name'],
             "revenue": round(float(territory['total_revenue']), 2),
             "cost": round(float(territory['total_cost'] or 0), 2),
-            "profit": round(float(territory['profit']), 2),
+            # "profit": round(float(territory['profit']), 2),
         }
         for territory in top_territories
     ]
