@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'account',
     'sales',
     'analysis',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -278,3 +279,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'account.employee'
+
+
+# Time zone support
+USE_TZ = True
+TIME_ZONE = 'UTC'
