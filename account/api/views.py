@@ -44,10 +44,14 @@ def EditEmployeeInformation(request):
         return ResponseSuccessful("Information edited successfully")
         
     except Exception as e:
-        # Response a error code and error content
+        # Response a error code and error content        
         if str(e):
+            print(str(e))
             error.append(str(e))
+        print(error)
         return ResponseError(error)
+    
+        
 
 
 

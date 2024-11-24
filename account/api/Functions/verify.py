@@ -24,6 +24,8 @@ def VerifyEmployeeInformation(request):
     # dict = dict.replace("null", "None")
     userinfo = json.loads(dict)
     
+    print(userinfo)
+    
     # Check if there is any error in user information
     error = []
     

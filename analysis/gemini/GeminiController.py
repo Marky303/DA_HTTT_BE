@@ -28,6 +28,9 @@ def GeminiController(request):
     # Check if response has function call
     if fc:
         
+        # TEST
+        print("Name of the function call is" + fc.name)
+        
         # Check if it is a query function
         if fc.name == "QueryPostgresDatamart":
             # Query and append query result to the final result
@@ -43,7 +46,9 @@ def GeminiController(request):
             fc = response.candidates[0].content.parts[0].function_call
             
             # Draw graphs and append the graph to the final result
-            Graph(fc.args['graphType'], queryResult['data'], result)
+            Graph(fc.args['graphType'], queryResult['content'], result)
+            
+            
             
         # Check if it is an analysis function
         elif fc.name == "PredictFromQueryData":
@@ -56,7 +61,7 @@ def GeminiController(request):
             result['list'].append(queryExplainResult)
             
             # Predict???
-            graphData = Predict(result['list'][-2]['data'], int(fc.args['step']))
+            graphData = Predict(result['list'][-2]['content'], int(fc.args['step']))
             
             # Draw predict graph
             Graph("predict", graphData, result)

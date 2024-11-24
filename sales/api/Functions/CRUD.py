@@ -472,8 +472,8 @@ def CreateSalesOrderHeaderCRUD(request):
     TaxAmt      = salesOrderInfo['TaxAmt']
     Freight     = salesOrderInfo['Freight']
     Comment     = salesOrderInfo['Comment']
-    territory   = Territory.objects.get(id=salesOrderInfo['territoryID'])
     customer    = Customer.objects.get(id=salesOrderInfo['customerID'])
+    territory   = customer.Territory
     user        = request.user    
     
     # Create new sales order header object
@@ -515,8 +515,8 @@ def EditSalesOrderHeaderCRUD(request):
     TaxAmt          = salesOrderInfo['TaxAmt']
     Freight         = salesOrderInfo['Freight']
     Comment         = salesOrderInfo['Comment']
-    territory       = Territory.objects.get(id=salesOrderInfo['territoryID'])
     customer        = Customer.objects.get(id=salesOrderInfo['customerID'])
+    territory       = customer.Territory
     user            = request.user    
     
     # Get sales order object
