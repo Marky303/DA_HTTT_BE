@@ -60,13 +60,15 @@ def Query(query):
     # Preprocess the query (adding quotation marks...)
     processedQuery = PreprocessQuery(query)
     
-    # print(processedQuery)
+    # TEST
+    print("The query after processing is")
+    print(processedQuery)
     
     # Create result object
     result = {
         "type": "queryResult",
         "query": processedQuery,
-        "data": None
+        "content": None
     }
     
     # With block will close connection and cursor when everything is done
@@ -97,11 +99,11 @@ def Query(query):
                 }
                 data.append(row_dict)
             
-            result['data'] = data
+            result['content'] = data
 
              
     # TEST
-    # print(result)
+    print(result)
              
     return result
 
@@ -165,13 +167,19 @@ def Graph(graphType, data, result):
             # Create result template
             item = {
                 "type": "graphResult",
-                "graphType": graphType,
-                "graph": img_base64,
-                "overview": overview
+                # "graphType": graphType,
+                "content": img_base64,
             }
-
+            
             # Add temporary result to list
             result['list'].append(item)
+            
+            # Add overview text to list
+            overviewItem = {
+                "type": "text",
+                "content": overview
+            }
+            result['list'].append(overviewItem)
         
     elif graphType == 'bar':
         # Extract the category label (first key) and category values
@@ -215,13 +223,19 @@ def Graph(graphType, data, result):
             # Create result template
             item = {
                 "type": "graphResult",
-                "graphType": graphType,
-                "graph": img_base64,
-                "overview": overview
+                # "graphType": graphType,
+                "content": img_base64,
             }
 
             # Add temporary result to list
             result['list'].append(item)
+            
+            # Add overview text to list
+            overviewItem = {
+                "type": "text",
+                "content": overview
+            }
+            result['list'].append(overviewItem)
     
     elif graphType == 'pie':
         print("draw a pie")
@@ -274,9 +288,8 @@ def Graph(graphType, data, result):
         # Create result template
         item = {
             "type": "graphResult",
-            "graphType": graphType,
-            "graph": img_base64,
-            "overview": None
+            # "graphType": graphType,
+            "content": img_base64,
         }
 
         # Add temporary result to list
