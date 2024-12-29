@@ -39,10 +39,10 @@ def VerifySpecialOfferInformation(request, error):
         error.append("MinQty must be less than MaxQty")
     
     #.4 Check StartDate and EndDate
-    startDate = datetime.strptime(specialOfferInfo['StartDate'], dateTimeFormat)
-    endDate = datetime.strptime(specialOfferInfo['EndDate'], dateTimeFormat)
-    if startDate >= endDate:
-        error.append("Start date must be before end date")
+    # startDate = datetime.strptime(specialOfferInfo['StartDate'], dateTimeFormat)
+    # endDate = datetime.strptime(specialOfferInfo['EndDate'], dateTimeFormat)
+    # if startDate >= endDate:
+    #     error.append("Start date must be before end date")
     
     #.5 Check DiscountPct
     if not 0 <= float(specialOfferInfo['DiscountPct']) <= 1:
