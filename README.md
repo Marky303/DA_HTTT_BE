@@ -86,8 +86,6 @@ python manage.py runserver
 ![finish](https://media.discordapp.net/attachments/518446875893039117/1306662826861006960/succeed.png?ex=67377c16&is=67362a96&hm=ce8ada2da9f0712f465683b2c4d0de45bfbffff14d002ce83ecdd0453980f2ae&=&format=webp&quality=lossless&width=1441&height=339)
 
 
-## 3.Lưu ý (IMPORTANT)
-- Nếu có thắc mắc hay bị lỗi trong quá trình cài đặt, nhắn trực tiếp với mình trên Zalo. Mình sẽ cố gắng trả lời trong thời gian ngắn nhất.
 
 
 

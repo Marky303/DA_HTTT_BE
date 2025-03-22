@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer       
+from rest_framework.serializers import ModelSerializer  
+from rest_framework import serializers     
 from sales.models import *
 
 # Normal serializers___________________________________________________
@@ -10,11 +11,26 @@ class SpecialOfferSerializer(ModelSerializer):
         
 # Special offer - product serializer
 class SpecialOfferProductSerializer(ModelSerializer):
-    SpecialOffer = SpecialOfferSerializer()
-    
+    Description = serializers.CharField(source='SpecialOffer.Description')
+    Type = serializers.CharField(source='SpecialOffer.Type')
+    StartDate = serializers.DateTimeField(source='SpecialOffer.StartDate')
+    EndDate = serializers.DateTimeField(source='SpecialOffer.EndDate')
+    MinQty = serializers.IntegerField(source='SpecialOffer.MinQty')
+    MaxQty = serializers.IntegerField(source='SpecialOffer.MaxQty')
+    DiscountPct = serializers.DecimalField(source='SpecialOffer.DiscountPct', max_digits=10, decimal_places=4)
+
     class Meta:
         model = SpecialOfferProduct
-        fields = ("id", "SpecialOffer")
+        fields = (
+            "id", 
+            "Description", 
+            "Type", 
+            "StartDate", 
+            "EndDate", 
+            "MinQty", 
+            "MaxQty", 
+            "DiscountPct",
+        )
         
 # Territory serializer
 class TerritorySerializer(ModelSerializer):
